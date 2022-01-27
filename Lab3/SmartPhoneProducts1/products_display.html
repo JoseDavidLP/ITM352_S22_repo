@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone Products</title>
+</head>
+<body>
+
+    <style>
+        /* General */
+        body {
+            width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        /* Form styling */
+        img
+        {
+            width: 200px;
+            height: 200px;
+        }
+        /* Styling the products display */
+        main
+        {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+            background-image: url(./images/phone_globe.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+        /* block styling */ 
+        div
+        {
+            border: 5px solid black;
+            display: flex;
+        }
+        </style>
+
+    <h1><a ref="products-style.css">Used Smart Phone Store</a></h1>
+    <div><main>
+        <section class="item" id="HTC" onmouseover="this.classname='item rotate'" onclick="this.classname='item'">
+            <h2>HTC</h2>
+            <p>$40.00</p>
+            <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/HTC.jpg" alt="HTC Phones">
+        </section>
+        <section class="item" id="HTC" onmouseover="this.classname='item rotate'" onclick="this.classname='item'">
+            <h2>Apple</h2>
+            <p>$75.00</p>
+            <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/iphone-3gs.jpg">
+        </section>
+        <section class="item" id="HTC" onmouseover="this.classname='item rotate'" onclick="this.classname='item'">
+            <h2>Nokia</h2>
+            <p>$35.00</p>
+            <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/Nokia.jpg">
+        </section>
+        <section class="item" id="HTC" onmouseover="this.classname='item rotate'" onclick="this.classname='item'">
+            <h2>samsung</h2>
+            <p>$45.00</p>
+            <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/Samsung.jpg">
+        </section>
+        <section class="item" id="HTC" onmouseover="this.classname='item rotate'" onclick="this.classname='item'">
+            <h2>Blackberry</h2>
+            <p>$10.00</p>
+            <img src="http://dport96.github.io/ITM352/morea/080.flow-control-II/Blackberry.jpg">
+        </section>
+    </main></div>
+</body>
+<footer>Your One Stop Phone Shop</footer>
+</html>
