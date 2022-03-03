@@ -1,0 +1,65 @@
+
+<style>
+    td:hover {
+        background-color: chartreuse;
+    }
+
+    td {
+        height: 25px;
+        width: 20px;
+        text-align: center;
+        cursor: cell;
+    }
+</style>
+
+
+<body>
+
+
+
+    <script>
+        var tictactoe = [
+            ["-", "-", "-"],
+            ["-", "-", "-"],
+            ["-", "-", "-"]
+        ];
+
+    </script>
+
+
+
+    <table border="1px">
+        <tbody>
+            <script>
+
+                var marks = ["X", "O"];
+                var move_num = 0;
+
+                for (let rows in tictactoe) {
+                    document.write('<tr></tr>');
+                    for (let i = 0; i < tictactoe[rows].length; i++) {
+                        document.write(`<td onclick='
+                    
+                    if (this.innerHTML = "-"){
+                        this.innerHTML = "${marks[move_num%2]}";
+                        console.log("${move_num}");
+                        status_div.innerHTML = "${marks[(++move_num)%2]}" +  " goes";
+                        
+                        
+                       
+                    }
+                    
+                    '>${tictactoe[rows][i]}</td>`);
+                    }
+                }
+
+
+
+
+            </script>
+        </tbody>
+    </table>
+
+    <div id=status_div>
+        X goes first.
+    </div>
