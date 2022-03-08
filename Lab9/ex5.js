@@ -14,4 +14,7 @@ function junk3() {
     for(let i3=1; i3<=2; i3++){console.log(i3);}
     return `i3 is ${i3}`;
 }
-console.log(junk1())
+// console.log(i1)
+//console.log(junk1());
+//console.log(junk2());
+console.log(junk3());
