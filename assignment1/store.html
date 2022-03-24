@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterOfLife International Store</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
+    <script src="./product_data.js"></script>
+</head>
+<body>
+    <script>
+        function isNonNegativeInteger(inputString, returnErrors = false) {
+            // Validate that an input value is a non-negative integer
+            // @inputString - input string
+            // @returnErrors - how the function returns: true mean return an array, false a boolean
+            errors = []; // assume no errors at first
+            if(Number(inputString) != inputString) {
+                errors.push('Not a number!'); // Check if string is a number value
+            }
+            else {
+                if(inputString < 0) errors.push('Negative value!'); // Check if it is non-negative
+                if(parseInt(inputString) != inputString) errors.push('Not an integer!'); // Check that it is an integer
+            }
+            return returnErrors ? errors : (errors.length == 0);
+        }
+
+        function displayPurchase() {
+            // Display the number of products purchased.
+            num_products = quantity_textbox.value;
+            if (isNonNegativeInteger(num_products)) {
+                document.write(`Thank you for purchasing ${num_products} things`);
+            }  
+        }
+        
+        function checkQuantityTextbox() {
+            var errors = isNonNegativeInteger(document.getElementById("quantity_textbox").value, true);
+            qty_textbox_message.innerHTML = errors.join(" / ");
+        }
+
+        let params = (new URL(document.location)).searchParams;
+
+        // Check if the textbox exists
+        if (params.has('quantity_textbox')) {
+            if (isNonNegativeInteger(params.get('quantity_textbox'))) {
+                document.body.innerHTML = `Thank you for ordering ${params.get('quantity_textbox')} things!`;
+            }
+            else {
+                document.body.innerHTML = `Invalid quantity. Try again.`;
+            }   
+        }
+        if (params.has('error')) {
+            error_message = params.get('error');
+            alert(error_message);
+        }
+    </script>
+
+    <!-- Website Logo -->
+    <div class="homepageLogo">
+        <a href="./index.html">
+            <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
+        </a>
+    </div>
+    <br>
+
+    <!-- Website Tagline -->
+    <div class="tagline">
+        <i>Taste the Water of Life</i>
+    </div>
+
+
+    <a href="invoice.html">
+        <button class="purchasebutton" type="button" width="100px"><b>Place Order</b></button>
+    </a>
+    
+
+    </div>
+    <!-- Print products to page (utilized from SmartPhoneProducts3 WOD) -->
+    <div class="products">
+        <script>
+        
+            for(i = 0; i < products.length; i++) {
+                // Assign rating image address based off of rating attribute in product_data.js 
+            
+                document.write(`
+                    <section class="item">
+                    <h2>${products[i].name}</td>
+                    </h2>
+                    <p>$${products[i].price.toFixed(2)}</p>
+                    <img class="beerPicture" src="${products[i].image}" height="200px">
+                    <p>${products[i].description}</p>
+                    <form class="itemForm" name='quantity_form' action="process_form" method="POST">
+                        <label for="quantity_textbox">Enter Quantity Desired:</label>
+                        <input type="text" name="quantity_textbox[${i}]" onkeyup="checkQuantityTextbox(this);">
+                    </form>
+                    </section>
+                `);
+            }
+        </script>
+    </div>
+</body>
+<footer>
+    Copywrite 2022 WaterOfLife International Corporation
+</footer>
+</html>

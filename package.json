@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "express": "^4.17.2",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "nodemon": "^2.0.15"
   }
 }
