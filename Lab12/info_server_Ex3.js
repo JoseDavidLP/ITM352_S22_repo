@@ -23,6 +23,24 @@ app.all('*', function (request, response, next) {
     next();
 });
 
+app.use(express.urlencoded({ extended: true }));
+
+// Rule to handle process_form request from order_page.html
+app.post("/process_form", function (request, response) {
+    var q = request.body['quantity_textbox'];
+    if (typeof q != 'undefined') {
+        let quantity = request.body['quantity_textbox'];
+        if (isNonNegativeInteger(quantity)) {
+            response.send(`<h1>Thank you for ordering ${quantity} products!</h1>`);
+        }
+        else {
+            response.send(`<i>${quantity} is not a valid quantity. Hit the back button to fix.</i>`)
+        }
+    } 
+
+ });
+ 
+
 // Route to handle just the path /test
 app.get('/test', function (request, response, next) {
     response.send('Got a GET request to path: /test');

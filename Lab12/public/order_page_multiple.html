@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="./product_data.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WaterOfLife International Store</title>
-    <link rel="stylesheet" href="./style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
-    <script src="./product_data.js"></script>
+    <title>Order Page</title>
 </head>
 <body>
     <script>
@@ -34,9 +32,9 @@
             }  
         }
         
-        function checkQuantityTextbox() {
-            var errors = isNonNegativeInteger(document.getElementById("quantity_textbox").value, true);
-            qty_textbox_message.innerHTML = errors.join(" / ");
+        function checkQuantityTextbox(theTextbox) {
+            errs = isNonNegInt(theTextbox.value, true);
+            document.getElementById(theTextbox.name + '_message').innerHTML = errs.join(", ");
         }
 
         let params = (new URL(document.location)).searchParams;
@@ -56,55 +54,21 @@
         }
     </script>
 
-    <!-- Website Logo -->
-    <div class="homepageLogo">
-        <a href="./index.html">
-            <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
-        </a>
-    </div>
-    <br>
-
-    <!-- Website Tagline -->
-    <div class="tagline">
-        <i>Taste the Water of Life</i>
-    </div>
-
-
-    <a href="invoice.html">
-        <button class="purchasebutton" type="button" width="100px"><b>Place Order</b></button>
-    </a>
-    
-
-    </div>
-    <!-- Print products to page (utilized from SmartPhoneProducts3 WOD) -->
-    <div class="products">
+    <form name='quantity_form' action="process_form" method="POST">
         <script>
-        
-            for(i = 0; i < products.length; i++) {
-                // Assign rating image address based off of rating attribute in product_data.js 
-            
+            for (i in products) {
+                document.write(`<h3>${products[i]["name"]} at \$${products[i]["price"]} (${products[i]["total_sold"]} sold)</h3>`);
                 document.write(`
-                    <section class="item">
-                    <h2>${products[i].name}</td>
-                    </h2>
-                    <p>$${products[i].price.toFixed(2)}</p>
-                    <img class="beerPicture" src="${products[i].image}" height="200px">
-                    <p>${products[i].description}</p>
-                    <form class="itemForm" name='quantity_form' action="process_form" method="POST">
-                        <label for="quantity_textbox">Enter Quantity Desired:</label>
-                        <input type="text" name="quantity_textbox[${i}]" onkeyup="checkQuantityTextbox(this);">
-                    </form>
-                    </section>
+                    <label for="quantity_textbox">quantity desired:</label>
+                    <input type="text" name="quantity_textbox[${i}]" onkeyup="checkQuantityTextbox(this);">
+                    <span id="quantity_textbox[${i}]_message">Enter a quantity</span>
                 `);
             }
         </script>
-    </div>
-
-    <br><input type="submit" class="button" value="Purchase" id="submit" name="purchase_submit">
+    
+        <br>
+        <input type="submit" value='Purchase'>
     </form>
 
 </body>
-<footer>
-    Copywrite 2022 WaterOfLife International Corporation
-</footer>
 </html>

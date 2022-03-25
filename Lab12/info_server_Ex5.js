@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
-var myParser = require('body-parser');
+var products = require('./product_data.json');
+products.forEach( (prod,i) => {prod.total_sold = 0}); 
 
 function isNonNegativeInteger(inputString, returnErrors = false) {
     // Validate that an input value is a non-negative integer
@@ -22,6 +23,35 @@ app.all('*', function (request, response, next) {
     console.log(request.method + ' to path: ' + request.path);
     next();
 });
+
+var products = require(__dirname + '/product_data.json');
+
+app.get("/product_data.js", function (request, response, next) {
+   response.type('.js');
+   var products_str = `var products = ${JSON.stringify(products)};`;
+   response.send(products_str);
+});
+
+app.use(express.urlencoded({ extended: true }));
+
+// Rule to handle process_form request from order_page.html
+app.post("/process_form", function (request, response) {
+    var q = request.body['quantity_textbox'];
+    let brand = products[0]['name'];
+    let brand_price = products[0]['price'];
+
+    if (typeof q != 'undefined') {
+        let quantity = request.body['quantity_textbox'];
+        if (isNonNegativeInteger(quantity)) {
+            response.send(`<h2>Thank you for purchasing ${q} ${brand}. Your total is \$${q * brand_price}!</h2>`);
+        }
+        else {
+            response.send(`<i>${q} is not a valid quantity. Hit the back button to fix.</i>`)
+        }
+    } 
+
+ });
+ 
 
 // Route to handle just the path /test
 app.get('/test', function (request, response, next) {
