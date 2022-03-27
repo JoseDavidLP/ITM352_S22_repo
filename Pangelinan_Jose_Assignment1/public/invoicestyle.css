@@ -1,16 +1,23 @@
 /* General */
-
+/* background code from https://css-tricks.com/perfect-full-page-background-image/ */
 body {
     width: 800px;
     margin: 0 auto;
-    background-image: url("../images/zuko.gif");
-    background-repeat: no-repeat;
-    background-position: right bottom;
+    background: url(./whiskeyphotos/background.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+  }
 
 input[type=button] {
     background-color: white;
-    color: darkgreen;
+    color: rgb(0, 0, 0);
     border-radius: 10px;
     padding: 20px 20px 20px 20px;
 }
@@ -26,7 +33,7 @@ h2 {
 h1 {
     font-family: 'Comforter Brush';
     font-size: 50pt;
-    color: darkgreen;
+    color: rgb(71, 36, 2);
 }
 
 h2,
@@ -50,6 +57,21 @@ main {
     justify-content: space-around;
 }
 
-body {
-    background-color: darkseagreen;
+/* Footer formatting */
+footer {
+    color: rgb(180, 180, 180);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 15px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-align: center;
 }
+/* Tagline thank you */
+.tagline {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 200px;
+    margin-bottom: 20px;
+}
+

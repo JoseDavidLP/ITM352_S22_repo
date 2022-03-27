@@ -1,3 +1,4 @@
+
 [
     {
        "name" : "Four Roses Single Barrel",
@@ -40,7 +41,7 @@
       "description" : "West Cork produces a gorgeous single-malt that sees Irish barley and local spring water going into a hand-built copper pot still, with the resulting distillate matured for eight years in first-fill, flame-charred bourbon barrels." 
    },
    {
-      "name" : "Lot No. 40 Whisky",
+      "name" : "Lot No. 40 Whiskey",
       "id_number" : 100006,
       "price" : 35.00,
       "image" : "whiskeyphotos/lot40.webp",

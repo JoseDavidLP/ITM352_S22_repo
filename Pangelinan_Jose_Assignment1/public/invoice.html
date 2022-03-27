@@ -31,7 +31,12 @@
 </head>
 
 <body>
-    <h2>Thank you for your order!</h2>
+
+<!-- Thank you line -->
+<div class="tagline">
+    <i>Thank you for your order!</i>
+</div>
+
     <table border="2" class="center">
         <tbody>
             <tr>
@@ -68,7 +73,7 @@
                 var discount;
                 if (subtotal > 15 && subtotal < 30) {
                     discount = 2.5;
-                } else if (subtotal >= 30 && subtotal < 50) {
+                } else if (subtotal >= 30 && subtotal < 75) {
                     discount = 5;
                 } else {
                     discount = subtotal * .15;
@@ -114,7 +119,7 @@
         </tbody>
     </table>
     <p>
-        <br> A subtotal between $15 and $30 will include a $2.50 discount. <br> A subtotal between $30 and $50 will include a $5 discount. <br> Subtotals over $50 will include a 15% discount.
+        <br> A subtotal between $15 and $30 will include a $2.50 discount. <br> A subtotal between $30 and $75 will include a $5 discount. <br> Subtotals over $75 will include a 15% discount.
     </p>
     <input type="button" name="to_products_display" value="Order More" onclick="window.location.href ='./products_display.html'">
 </body>

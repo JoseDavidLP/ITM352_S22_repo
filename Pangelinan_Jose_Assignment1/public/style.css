@@ -100,3 +100,7 @@ footer {
     margin-top: 30px;
     text-align: center;
 }
+/* remove underline */
+a {
+    text-decoration: none;
+}

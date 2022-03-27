@@ -32,30 +32,28 @@
     </div>
     <br>
 
-    <!-- Website Tagline -->
+    <!-- Tagline -->
     <div class="tagline">
         <i>Taste the Water of Life</i>
     </div>
 
-    <!-- Page content -->
-    <h2 style="font-family: Comforter Brush; font-size: 25pt; color: white; margin-top: 101px;">Best Boba Shop in Ba Sing Se!</h2>
+    <!-- Guide content -->
     <p style="text-align: center;">To make your online order, enter the number of drinks you would like underneath the flavor. Click the Place Order button at the bottom of the page to submit your order and receive a receipt.</p><br>
 
     <!-- Form code, modified from SmartPhoneProducts WODs -->
     <div class="products">
         <form action="./purchase" method="post">
-            <main>
+            <main class="products">
                 <script>
                     for (i in products) {
                         document.write(`
-        <section class="item">
+            <section class="item">
             <h2>${products[i].name}</h2>
             <img src="${products[i].image}" height="200px">
             <p>$${products[i].price}</p>
             <p> Quantity: ${products[i].quantity_available}</p>
             <p>${products[i].description}</p>
             <center><input type ="text" placeholder="0" name= "quantity_textbox${i}" onkeyup="checkQuantity${this};"></center><br>
-
         </section>
         `);
                     }
