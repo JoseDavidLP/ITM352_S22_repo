@@ -1,0 +1,55 @@
+/* General */
+
+body {
+    width: 800px;
+    margin: 0 auto;
+    background-image: url("../images/zuko.gif");
+    background-repeat: no-repeat;
+    background-position: right bottom;
+}
+
+input[type=button] {
+    background-color: white;
+    color: darkgreen;
+    border-radius: 10px;
+    padding: 20px 20px 20px 20px;
+}
+
+
+/* Typography; font-family from google fonts */
+
+h1,
+h2 {
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Comforter Brush';
+    font-size: 50pt;
+    color: darkgreen;
+}
+
+h2,
+th,
+td {
+    font-family: 'Montagu Slab', serif;
+    text-align: center;
+}
+
+th,
+td {
+    background-color: white;
+}
+
+
+/* Invoice styling */
+
+main {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+body {
+    background-color: darkseagreen;
+}
