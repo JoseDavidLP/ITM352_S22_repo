@@ -3,17 +3,19 @@
 body {
     width: 800px;
     margin: 0 auto;
-    background: url(./whiskeyphotos/background.jpg) no-repeat center center fixed; 
+    background: url(./whiskeyphotos/invoicephoto1.gif) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 }
-
+/* used to center table */
 .center {
     margin-left: auto;
     margin-right: auto;
   }
+
+  /* Order More button format */
 
 input[type=button] {
     background-color: white;
@@ -22,6 +24,9 @@ input[type=button] {
     padding: 20px 20px 20px 20px;
 }
 
+p {
+    color: floralwhite;
+}
 
 /* Typography; font-family from google fonts */
 
@@ -59,11 +64,11 @@ main {
 
 /* Footer formatting */
 footer {
-    color: rgb(180, 180, 180);
+    color: rgb(255, 255, 255);
     font-family: 'Josefin Sans', sans-serif;
     font-size: 15px;
     margin-bottom: 30px;
-    margin-top: 30px;
+    margin-top: 250px;
     text-align: center;
 }
 /* Tagline thank you */

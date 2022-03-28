@@ -24,6 +24,7 @@
 </head>
 
 <body>
+    <!-- Consistent formatting of logo and tagline -->
      <!-- Website Logo -->
      <div class="homepageLogo">
         <a href="./index.html">
@@ -37,10 +38,10 @@
         <i>Taste the Water of Life</i>
     </div>
 
-    <!-- Guide content -->
+    <!-- Text content -->
     <p style="text-align: center;">To make your online order, enter the number of drinks you would like underneath the flavor. Click the Place Order button at the bottom of the page to submit your order and receive a receipt.</p><br>
 
-    <!-- Form code, modified from SmartPhoneProducts WODs -->
+    <!-- Displays products and POST to ./purchase -->
     <div class="products">
         <form action="./purchase" method="post">
             <main class="products">
@@ -59,12 +60,13 @@
                     }
                 </script>
             </main>
-            <input class="homepageButton" type="submit" name="purchase_order" value="Place Order"></center>
+            <!-- Insert purchase button -->
+            <input class="purchasebutton" type="submit" name="purchase_order" value="Place Order"></center>
         </form>
     </div>
 
 </body>
-<footer>
+<footer class="center">
     Copywrite 2022 WaterOfLife international Corporation
 </footer>
 </html>
