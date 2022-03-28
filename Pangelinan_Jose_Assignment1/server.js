@@ -1,11 +1,9 @@
-//server code: modified from info_server_Ex5.js in Lab13
-
-//create server framework with express
+//modified from info_server_Ex5.js in Lab13 code
+//server framework with express
 var express = require('express');
 var app = express();
 
-//querystring package
-var qs = require('querystring');
+const qs = require('querystring');
 
 //To access inputted data from products_display.html
 app.use(express.urlencoded({ extended: true }));
@@ -29,12 +27,11 @@ products.forEach((prod, i) => { prod.total_sold = 0 });
 
 //route to validate quantities on server
 app.post("/purchase", function(request, response, next) {
-    var errors = []; //start with no errors
-    var has_quantity = false; //start with no quantity
+    var errors = []; 
+    var has_quantity = false; 
 
     //use loop to validate all product quantities
     for (i in products) {
-        //access quantities entered from order form
         let quantity = request.body['quantity_textbox' + i];
         //check if there is a quantity; if not, has_quantity will still be false
         if (quantity.length > 0) {
@@ -52,7 +49,6 @@ app.post("/purchase", function(request, response, next) {
             errors[`invalid_quantity${i}`] = `Please enter a valid quantity for ${products[i].flavor}! `;
         }
         //check if there is enough in inventory
-        //access quantity_available from json file
         let inventory = products[i].quantity_available;
 
         //if quantity ordered is less than or same as the amount in inventory, reduce inventory by quantity ordered amount 
@@ -60,7 +56,7 @@ app.post("/purchase", function(request, response, next) {
             products[i].quantity_available -= Number(quantity);
             console.log(`${products[i].quantity_available} is new inventory amount`);
         }
-        //if there's not enough in inventory, add error (quantity too large)
+    
         else {
             errors[`invalid_quantity${i}`] = `Please order a smaller amount of ${products[i].flavor}! `;
         }

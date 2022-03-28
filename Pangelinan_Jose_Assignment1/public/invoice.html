@@ -1,5 +1,4 @@
 <!--invoice template from invoice4 WOD-->
-
 <!--get product data from server-->
 <script src="./product_data.js" type="text/javascript"></script>
 <script>
@@ -7,7 +6,6 @@
     let params = (new URL(document.location)).searchParams;
     var quantities = []; //start with no quantities
 
-    //from Assignment1 Workshop
     //if form was submitted on order_form.html, get quantity if it is in the query string
     if (params.has('purchase_order')) {
         for (i = 0; i < products.length; i++) {
@@ -34,9 +32,9 @@
 
 <!-- Thank you line -->
 <div class="tagline">
-    <p>Thank you for your order!</p>
+    <p>Thank you for shopping at WaterOfLife!</p>
 </div>
-
+<!-- Create table -->
     <table border="2" class="center">
         <tbody>
             <tr>
@@ -65,7 +63,7 @@
                         `);
                     }
                 }
-                //Tax
+                //Tax @4%
                 var tax_rate = .04;
                 var sales_tax = tax_rate * subtotal;
 
@@ -79,12 +77,13 @@
                     discount = subtotal * .15;
                 }
 
-                //Grand total
+                //Calculate Ggrand total
                 var grand_total = subtotal + sales_tax - discount;
             </script>
             <tr>
                 <td colspan="4" width="100%">&nbsp;</td>
             </tr>
+            <!-- sub-total, tax, discount, and total -->
             <tr>
                 <td colspan="3" width="67%">Sub-total</td>
                 <td width="54%">$
@@ -118,6 +117,7 @@
             </tr>
         </tbody>
     </table>
+    <!-- discount options -->
     <p>
         <br> A subtotal between $15 and $30 will include a $2.50 discount. <br> A subtotal between $30 and $75 will include a $5 discount. <br> Subtotals over $75 will include a 15% discount.
     </p>
