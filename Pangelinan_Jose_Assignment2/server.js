@@ -1,4 +1,6 @@
 //modified from info_server_Ex5.js in Lab13 code
+//modified from info_server_EC.js in Lab13 code
+//modified code from previous student https://github.com/chloekamm/ITM352_F21/blob/main/Kam_Chloe_Assignment1/server.js
 //server framework with express
 var express = require('express');
 var app = express();
