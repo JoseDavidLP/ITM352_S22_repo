@@ -2,18 +2,20 @@
 <!--get product data from server-->
 <script src="./product_data.js" type="text/javascript"></script>
 <script>
-    //get quantities from querystring
-    let params = (new URL(document.location)).searchParams;
+    //get quantities from server variable
     var quantities = []; //start with no quantities
 
-    //if form was submitted on order_form.html, get quantity if it is in the query string
-    if (params.has('purchase_order')) {
-        for (i = 0; i < products.length; i++) {
-            if (params.has(`quantity_textbox${i}`)) {
-                a_qty = params.get(`quantity_textbox${i}`);
-                quantities[i] = a_qty;
-            }
+    for (i in purchase_form_data) {
+        if (purchase_form_data.includes(`quantity_textbox${i}` == true)) {
+            a_qty = `quantity_textbox${i}`;
+            quantities[i] = a_qty;
         }
+    }
+</script>
+<script>
+    let params = (new URL(document.location)).searchParams;
+    if (params.has('username')) {
+        var username = params.get('username');
     }
 </script>
 <!DOCTYPE html>

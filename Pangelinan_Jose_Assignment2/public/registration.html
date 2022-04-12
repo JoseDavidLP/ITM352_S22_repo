@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./style.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+
+let params = (new URL(document.location)).searchParams;
+    // get the query string which has the form data
+
+    window.onload = function() {
+        // check whether username is valid then redirect to invoice if ok.
+        if (params.has('reg_errors')) {
+            var errors = JSON.parse(params.get('reg_errors'));
+
+            for (i = 0; i < register_form.elements.length; i++) {
+                register_form[i].value = params.get(register_form[i].name);
+                if (typeof errors[register_form[i].name] != 'undefined') {
+                    document.getElementById(register_form[i].name + '_error').innerHTML = errors[register_form[i].name];
+                }
+            }
+        }
+    }
+</script>
+
+<body>
+     <!-- Website Logo -->
+     <div class="homepageLogo">
+        <a href="./index.html">
+            <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
+        </a>
+    </div>
+    <br>
+
+    <!-- Website Tagline -->
+    <div class="tagline">
+        <i>Taste the Water of Life</i>
+    </div>
+
+    <center><h2>Create your new account!</h2></center>
+    <center>
+        <form name="register_form" action="./register" method="POST">
+            <label id="username_label" for="username"><b>Username</b></label>
+            <input type="text" name="username" size="40" placeholder="Enter username">
+            <div id='username_error' style="color: darkgreen;"></div>
+            <br>
+
+            <label id="name_label"><b>Full Name</b></label>
+            <input type="text" name="name" size="40" placeholder="Enter full name">
+            <div id='name_error' style="color: darkgreen;"></div>
+            <br>
+
+            <label id="password_label" for="password"><b>Password</b></label>
+            <input type="password" name="password" size="40" placeholder="Enter password">
+            <div id='password_error' style="color: darkgreen;"></div>
+            <br>
+
+            <label id="repeatPassword_label" for="repeat_password"><b>Repeat password</b></label>
+            <input type="password" name="repeat_password" size="40" placeholder="Reenter password">
+            <div id='passwordReenter_error' style="color: darkgreen;"></div>
+            <br>
+
+            <label id="email_label" for="email"><b>Email</b></label>
+            <input type="email" name="email" size="40" placeholder="Enter email">
+            <div id='email' style="color: darkgreen;"></div>
+            <br>
+            <input type="submit" value="Submit" id="submit">
+        </form> <br>
+        <p>Already have an account? Login <a href="./login_page.html" style="color: darkgreen;">here</a></p>
+        
+    </center>
+</body>
+</html>
