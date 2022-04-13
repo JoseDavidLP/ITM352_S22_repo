@@ -28,7 +28,7 @@ app.get("/product_data.js", function(request, response) {
 // process purchase request (validate quantities, check quantity available)
 products.forEach((prod, i) => { prod.total_sold = 0 });
 
-//variable for purchase data
+//variable for purchase data; use for transient data
 var purchase_form_data;
 
 //route to validate quantities on server
@@ -79,7 +79,7 @@ app.post("/purchase", function(request, response, next) {
 
     //if there's no errors, send to login page
     if (Object.keys(errors).length == 0) {
-        purchase_form_data = quantity;
+        purchase_form_data = request.body;
         console.log(purchase_form_data);
         if (user_logged_in == true) {
             response.redirect('./invoice.html' + purchase_form_data);
