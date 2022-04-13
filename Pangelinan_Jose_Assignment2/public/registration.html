@@ -44,34 +44,41 @@ let params = (new URL(document.location)).searchParams;
     <center><h2>Create your new account!</h2></center>
     <center>
         <form name="register_form" action="./register" method="POST">
-            <label id="username_label" for="username"><b>Username</b></label>
-            <input type="text" name="username" size="40" placeholder="Enter username">
-            <div id='username_error' style="color: darkgreen;"></div>
-            <br>
 
-            <label id="name_label"><b>Full Name</b></label>
-            <input type="text" name="name" size="40" placeholder="Enter full name">
-            <div id='name_error' style="color: darkgreen;"></div>
-            <br>
+            <div class="form-outline mb-4">
+              <input placeholder="Email" type="email" name="email" id="email"
+                class="form-control form-control-lg" />
+              <label class="form-label" name="email_label" for="email"></label>
+            </div>
 
-            <label id="password_label" for="password"><b>Password</b></label>
-            <input type="password" name="password" size="40" placeholder="Enter password">
-            <div id='password_error' style="color: darkgreen;"></div>
-            <br>
+            <div class="form-outline mb-4">
+              <input placeholder="Full Name" type="text" name="fullname" id="fullname"
+                class="form-control form-control-lg" />
+              <label class="form-label" id="fullname_label" for="fullname"></label>
+            </div>
 
-            <label id="repeatPassword_label" for="repeat_password"><b>Repeat password</b></label>
-            <input type="password" name="repeat_password" size="40" placeholder="Reenter password">
-            <div id='passwordReenter_error' style="color: darkgreen;"></div>
-            <br>
+            <div class="form-outline mb-4">
+              <input placeholder="Password" name="password" type="password" id="password"
+                class="form-control form-control-lg" />
+              <label class="form-label" id="password_label" for="password"></label>
+            </div>
 
-            <label id="email_label" for="email"><b>Email</b></label>
-            <input type="email" name="email" size="40" placeholder="Enter email">
-            <div id='email' style="color: darkgreen;"></div>
-            <br>
-            <input type="submit" value="Submit" id="submit">
-        </form> <br>
-        <p>Already have an account? Login <a href="./login_page.html" style="color: darkgreen;">here</a></p>
-        
+            <div class="form-outline mb-4">
+              <input placeholder="Repeat your password" name="repeat_password" type="password"
+                id="repeat_password" class="form-control form-control-lg" />
+              <label class="form-label" id="repeat_password_label" for="repeat_password"></label>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary btn-block btn-light">Register</button>
+            </div>
+
+            <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="login.html"
+                class="fw-bold text-body"><u>Login here</u></a></p>
+
     </center>
 </body>
+<footer>
+  Copywrite 2022 WaterOfLife international Corporation
+</footer>
 </html>

@@ -1,22 +1,21 @@
 <!--invoice template from invoice3 WOD-->
 <!--get product data from server-->
-<script src="../product_data.json" type="text/javascript"></script>
-<script>
-    //get quantities from server variable
-    var quantities = []; //start with no quantities
+<script src="./products.js" type="text/javascript"></script>
+<script src="/user_data.json" type="json"></script>
 
-    for (i in purchase_form_data) {
-        if (purchase_form_data.includes(`quantity_textbox${i}` == true)) {
-            a_qty = `quantity_textbox${i}`;
-            quantities[i] = a_qty;
-        }
-    }
-</script>
 <script>
-    let params = (new URL(document.location)).searchParams;
-    if (params.has('username')) {
-        var username = params.get('username');
-    }
+  let params = (new URL(document.location)).searchParams; //takes data from querystring
+  var quantities = []; //gets quantities to store
+  if (params.has('quantity')) {
+    quantities = JSON.parse(params.get(`quantity`)); //params gets quantity from purchase, parses string into a json object
+  }
+//name is wrong, back to login, borrowed from li xinfei.
+  //var email = [];
+  if (params.has('fullname')) {
+    var fullname = params.get(`fullname`);
+  } else {
+    window.location.href = "./login.html";
+  }
 </script>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +56,7 @@
                         //generate the product rows for table
                         document.write(`
                         <tr>
-                        <td width="43%">${products[i].name}</td>
+                        <td width="43%">${products[i].item}</td>
                         <td align="center" width="11%">${quantities[i]}</td>
                         <td width="13%">\$${products[i].price}</td>
                         <td width="54%">\$${extended_price.toFixed(2)}</td>
@@ -123,7 +122,7 @@
     <p>
         <br> A subtotal between $15 and $30 will include a $2.50 discount. <br> A subtotal between $30 and $75 will include a $5 discount. <br> Subtotals over $75 will include a 15% discount.
     </p>
-    <input type="button" name="to_products_display" value="Order More" onclick="window.location.href ='./products_display.html'">
+    <input type="button" name="to_products_display" value="Order More" onclick="window.location.href ='./shop.html'">
 </body>
 <footer>
     Copywrite 2022 WaterOfLife international Corporation

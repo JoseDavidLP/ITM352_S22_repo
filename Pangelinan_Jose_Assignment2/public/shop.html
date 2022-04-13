@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script src="./products.js" type="text/javascript"></script>
+    <script>
+      function isNonNegInt(q, return_errors = false) {
+        errors = []; // assume no errors at first
+        if (q == '') q = 0; // handle blank inputs as if they are 0
+        if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+        else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+        else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+        return return_errors ? errors : (errors.length == 0);
+      }
+      //assignment 1 examples
+      function checkQuantityTextbox(the_textbox) {
+        errs = isNonNegInt(the_textbox.value, true);
+        if (errs.length == 0) errs = ['You want:'];
+        if (the_textbox.value.trim() == '') errs = ['Quantity'];
+        document.getElementById(the_textbox.name + '_label').innerHTML = errs.join(", ");
+      }
+      //from Assignment 1 example/reece nagaoka FW21:
+      let params = (new URL(document.location)).searchParams; // get the query string which has the form data
+      window.onload = function () {
+        // form was submitted, check that quantities are valid then redirect to invoice if ok.
+        if (params.has('errors')) {
+          var errors = JSON.parse(params.get('errors')); //turns string in object
+          let err_str = '';
+          for (err in errors) { //combine errors in one string
+            err_str += errors[err] + '\n';
+          }
+          alert(err_str);
+        }
+        if (params.has('quantity')) { //STICKY; 
+          var quantities = JSON.parse(params.get('quantity')); //turns string in object
+          // put quantities in quantity textboxes
+          for (i in quantities) { //THIS IS TAKEN FROM MOMOKA MICHIMOTO
+            quantity_form['quantity[' + i + ']'].value = quantities[i];//loops through the quantity array collected in the server 
+            checkQuantityTextbox(quantity_form['quantity[' + i + ']']);// and checks it
+          }
+        }
+      }
+    </script>
+    
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterOfLife International Store</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
+    <script src="../products.js"></script>
+    <title>Water Of Life</title>
+    
+</head>
+
+<body>
+    <!-- Consistent formatting of logo and tagline -->
+     <!-- Website Logo -->
+     <div class="homepageLogo">
+        <a href="./index.html">
+            <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
+        </a>
+    </div>
+    <br>
+
+    <!-- Tagline -->
+    <div class="tagline">
+        <i>Taste the Water of Life</i>
+    </div>
+
+    <!-- Text content -->
+    <p style="text-align: center;">To make your online order, enter the quantity you would like underneath each product. Click the Place Order button at the bottom of the page to submit your order and receive a receipt.</p><br>
+
+    <!-- Displays products and POST to ./purchase -->
+    <div class="products">
+        <form name="quantity_form" action="./process_form" method="POST">
+            <main class="products">
+                <script>
+                 for (i in products) {
+          document.write(`
+            <section class="item">
+            <h2>${products[i].item}</h2>
+            <img src="${products[i].image}" height="200px">
+            <p>$${products[i].price}</p>
+            <p> Quantity: ${products[i].quantity_available}</p>
+            <p>${products[i].description}</p>
+            <center><input type="text" placeholder="Enter Quantity" name="quantity[${i}]" onkeyup="checkQuantityTextbox(this);"></center><br>
+        </section>
+        `);
+        }
+                </script>
+            </main>
+            <!-- Insert purchase button -->
+            <input class="purchasebutton" type="submit" name="purchase_order" value="Place Order">
+        </form>
+    </div>
+
+</body>
+<footer class="center">
+    Copywrite 2022 WaterOfLife international Corporation
+</footer>
+</html>
