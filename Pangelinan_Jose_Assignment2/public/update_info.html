@@ -1,3 +1,9 @@
+<!-- 
+Jose Pangelinan
+Assignment 2
+Update information page, allows for users to update their password to keep their account secured
+-->
+
 <!DOCTYPE html>
 
 <!--https://mdbootstrap.com/docs/standard/extended/login/#section-4 login template -->
@@ -6,7 +12,7 @@
 <script>
   window.onload = function () {
     let params = (new URL(document.location)).searchParams;
-    //borrowed from momoka michimoto FW21
+    //borrowed from Tiffany Young
    if (params.has('email')) { //params searches 'email' and changes the email value textbox to the email entered
         email.value = params.get('email') //sticky
       }
@@ -23,12 +29,15 @@
 </script>
 <html lang="en">
 
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- link to stylesheet-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="./style.css">
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <title>Update User Info</title>
@@ -47,6 +56,7 @@
 <div class="tagline">
     <i>Taste the Water of Life</i>
 </div>
+<!-- simple design for update info page (same as registration)-->
 <center>
   <section class="vh-100 gradient-custom">
   
@@ -77,12 +87,13 @@
                     class="form-outline mb-4" />
                   <label class="form-label" id="repeatnewpassword_label" for="repeatnewpassword"></label>
                 </div>
+                <!-- button to change password-->
                 <div class="form-outline mb-4">
                   <button type="submit" class="purchasebutton" id="change_password"
                     name="change_password" onclick="">Change Password</button>
                 </div>
               </div>
-
+                <!-- link to redirect to registration page is user has no account-->
               <div>
                 <p class="mb-0">Don't have an account? <a href="registration.html" class="text-white-50 fw-bold">Sign Up</a>
                 </p>

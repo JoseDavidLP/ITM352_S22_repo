@@ -1,3 +1,8 @@
+
+//Jose Pangelinan
+//Assignment 2
+//This is the server for store app
+
 //modified from info_server_Ex5.js in Lab13 code
 //modified from info_server_EC.js in Lab13 code
 //modified from Tiffany Young | chloekamm
