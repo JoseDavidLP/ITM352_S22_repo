@@ -74,6 +74,7 @@ app.post("/purchase", function(request, response, next) {
     //if there's no errors, create a receipt
     if (Object.keys(errors).length == 0) {
         response.redirect('./invoice.html?' + qstring);
+        console.log(qstring)
     } else {
         //if there's errors
         //generate error message based on type of error

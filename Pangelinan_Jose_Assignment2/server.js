@@ -1,29 +1,11 @@
-//modified from info_server_Ex5.js in Lab13 code
-//modified from info_server_EC.js in Lab13 code
-//modified code from previous student https://github.com/chloekamm/ITM352_F21/blob/main/Kam_Chloe_Assignment1/server.js
-//server framework with express
 var express = require('express');
 var app = express();
-//define filename
-var filename = ("./user_data.json");
+//javascript modules
+var qs = require('querystring'); //querystring module (products display & invoice)
+const fs = require('fs'); //file system module (login & registration)
 
-const qs = require('querystring');
-const fs = require('fs');
-
-//To access inputted data from products_display.html
+//To access inputted data
 app.use(express.urlencoded({ extended: true }));
-
-// start with user logged out
-var user_logged_in = false;
-
-// ------------Products display page---------------
-//products data 
-var products = require('./product_data.json');
-app.get("/product_data.js", function(request, response) {
-    response.type('.js');
-    var products_str = `var products = ${JSON.stringify(products)};`;
-    response.send(products_str);
-});
 
 // monitor all requests; from info_server_Ex5.js in Lab13
 app.all('*', function(request, response, next) {
@@ -31,16 +13,32 @@ app.all('*', function(request, response, next) {
     next();
 });
 
+//start with user logged out
+var user_logged_in = false;
+
+//--------------------products display page--------------------
+//products data
+var products = require('./product_data.json');
+app.get("/product_data.js", function(request, response) {
+    response.type('.js');
+    var products_str = `var products = ${JSON.stringify(products)};`;
+    response.send(products_str);
+});
+
 // process purchase request (validate quantities, check quantity available)
 products.forEach((prod, i) => { prod.total_sold = 0 });
 
+//variable for purchase data
+var purchase_form_data;
+
 //route to validate quantities on server
 app.post("/purchase", function(request, response, next) {
-    var errors = []; 
-    var has_quantity = false; 
+    var errors = []; //start with no errors
+    var has_quantity = false; //start with no quantity
 
     //use loop to validate all product quantities
     for (i in products) {
+        //access quantities entered from order form
         let quantity = request.body['quantity_textbox' + i];
         //check if there is a quantity; if not, has_quantity will still be false
         if (quantity.length > 0) {
@@ -55,19 +53,20 @@ app.post("/purchase", function(request, response, next) {
         }
         //if quantity is not a non-negative integer, add error (invalid quantity)
         else {
-            errors[`invalid_quantity${i}`] = `Please enter a valid quantity for ${products[i].name}! `;
+            errors[`invalid_quantity${i}`] = `Please enter a valid quantity for ${products[i].flavor}! `;
         }
         //check if there is enough in inventory
+        //access quantity_available from json file
         let inventory = products[i].quantity_available;
 
         //if quantity ordered is less than or same as the amount in inventory, reduce inventory by quantity ordered amount 
-        if (Number(quantity) <= inventory) {
+        if (Number(quantity) <= inventory && isNonNegInt(quantity)) {
             products[i].quantity_available -= Number(quantity);
             console.log(`${products[i].quantity_available} is new inventory amount`);
         }
-    
+        //if there's not enough in inventory, add error (quantity too large)
         else {
-            errors[`invalid_quantity${i}`] = `Please order a smaller amount of ${products[i].name}! `;
+            errors[`invalid_quantity${i}`] = `Please order a smaller amount of ${products[i].flavor}! `;
         }
     }
     //if there are no quantities, send back to order page with message (need quantities)
@@ -78,9 +77,9 @@ app.post("/purchase", function(request, response, next) {
     // create query string from request.body
     var qstring = qs.stringify(request.body);
 
-    //if there's no errors, create a receipt
+    //if there's no errors, send to login page
     if (Object.keys(errors).length == 0) {
-        purchase_form_data = request.body;
+        purchase_form_data = quantity;
         console.log(purchase_form_data);
         if (user_logged_in == true) {
             response.redirect('./invoice.html' + purchase_form_data);
@@ -110,10 +109,17 @@ function isNonNegInt(q, returnErrors = false) {
     else {
         if (q < 0) errors.push('Negative value!'); // Check if it is non-negative
         if (parseInt(q) != q) errors.push('Not an integer!'); // Check that it is an integer
-
     }
     return returnErrors ? errors : (errors.length == 0);
 };
+
+//route for purchase form data
+app.get("/purchase_form_data.js", function(request, response) {
+    response.type('.js');
+    var purchase_str = `var purchase_form_data = ${JSON.stringify(purchase_form_data)};`;
+    console.log(purchase_str);
+    response.send(purchase_str);
+})
 
 //--------------------registration form--------------------
 var filename = './user_data.json';
@@ -245,13 +251,11 @@ app.post("/login", function(request, response) {
         //response.send(reg_error_string);
         response.redirect('./login_page.html?' + `&log_error_string=${log_error_string} `);
         console.log(`log_error_string=${log_error_string} `);
-        
     }
 });
 
-
 // route all other GET requests to files in public 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static('./public'));
 
 // start server
 app.listen(8080, () => console.log(`listening on port 8080`));

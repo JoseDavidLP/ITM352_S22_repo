@@ -7,6 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
+<script>
+    window.onload = () => {
+        //get query string
+        let params = (new URL(document.location)).searchParams;
+        //if there's an error, add error message
+        if (params.has('log_error_string')) {
+            alert(params.get('log_error_string'));
+        }
+        //make username sticky
+        if (params.has('username')) {
+            username.value = params.get('username');
+        }
+    }
+</script>
+
 <body>
      <!-- Website Logo -->
      <div class="homepageLogo">
