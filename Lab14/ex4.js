@@ -1,13 +1,7 @@
 var express = require('express');
 var app = express();
-var myParser = require("body-parser");
 
-app.all('*', function (request, response, next) {
-    console.log(request.method + ' to path: ' + request.path);
-    next();
-});
-
-app.get('/', function(req,res) {
+app.get('/', function (req, res) {
     res.send(
         `<form action="/process_form" method="POST">
             Name1: <input  name="name1"><br>
@@ -17,8 +11,7 @@ app.get('/', function(req,res) {
     );
 });
 
-app.post('/process_form', function(req, res) {
-    console.log(req);
+app.post('/processform', function (req, res) {
     if (typeof req.body['Submit'] != 'undefined') {
         for (value in req.body) {
             if (value == "Tyler") {
@@ -27,7 +20,7 @@ app.post('/process_form', function(req, res) {
                 res.send("I couldn't find Tyler :(");
             }
         }
-        
+
     }
 });
 
