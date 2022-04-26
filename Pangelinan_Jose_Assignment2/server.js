@@ -77,7 +77,7 @@ app.post("/process_login", function (request, response) { //modified from Tiffan
 
 /*----------------REGISTRATION PAGE--------------*/
 //regex from assignment 2 resources
-app.post("/register", function (request, response) {
+app.post("/register", function (request, response) { //modified from Tiffany Young
    var registration_errors = {};
    //check email
    var reg_email = request.body['email'].toLowerCase();
@@ -216,7 +216,7 @@ app.all('*', function (request, response, next) {
 
 /* -------------------- PURCHASE PROCESS-----------------*/
 // process purchase request (validate quantities, check quantity available)
-app.post('/process_form', function (request, response, next) {
+app.post('/process_form', function (request, response, next) { //modified from Tiffany Young
    var quantities = request.body['quantity'];
    //assume no errors or no quantity
    var errors = {};
