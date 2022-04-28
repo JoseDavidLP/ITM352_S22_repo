@@ -127,7 +127,8 @@ app.get("/register", function (request, response) {
   app.get("/use_session", function (request, response) {
     console.log(request.session);
     response.send(`welcome, your session ID is ${request.session.id}`)
-    
+    request.session.destroy();
+
 
 });
 
