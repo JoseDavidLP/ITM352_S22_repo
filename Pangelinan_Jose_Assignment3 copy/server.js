@@ -84,6 +84,18 @@ app.get("/add_to_cart", function (request, response) {
 app.get("/get_cart", function (request, response) {
    response.json(request.session.cart);
 });
+app.get("/session_data.js", function (request, response, next) {
+   response.type('.js');
+   // declare a shopping cart if there isn't one
+   if (typeof request.session.cart == 'undefined') {
+       request.session.cart = {};
+   }
+   // now to declare the username, email, name 
+   // Gonna keep all the data into one long Javascript string with the data as variables
+   var session_str = `var user_name = ${JSON.stringify(request.session.username)}; var full_name = ${JSON.stringify(request.session.full_name)}; var user_email = ${JSON.stringify(request.session.email)}; var cart_data = ${JSON.stringify(request.session.cart)};`;
+   // send the client the session string
+   response.send(session_str);
+})
 
 app.get("/checkout", function (request, response) {
   // Generate HTML invoice string
@@ -145,11 +157,12 @@ app.post("/process_login", function (request, response) { //modified from Tiffan
          qty_data_obj['email'] = user_email;
          qty_data_obj['fullname'] = users[user_email].name;
           //Gets variable for cookie to display username on pages
-          var user_info = { "email": user_email, "name": login_username, };
+          var user_info = { "email": user_email, "name": qty_data_obj['fullname'], };
           //Gives cookie a expiration time, it will hold user data for 30 minutes EXTRA CREDIT??
           response.cookie('user_info', JSON.stringify(user_info), { maxAge: 30 * 60 * 1000 });
          //direct to invoice page **need to keep data
          let params = new URLSearchParams(qty_data_obj);
+         console.log(user_info);
          response.redirect('./display_products.html?products_key=Whiskey');
          return;
       } else {
@@ -241,7 +254,7 @@ app.post("/register", function (request, response) { //modified from Tiffany You
       qty_data_obj['email'] = reg_email;
       qty_data_obj['fullname'] = users[reg_email]['fullname'];
       let params = new URLSearchParams(qty_data_obj);
-      response.redirect('./invoice.html?' + params.toString()); //all good! => to invoice w/data
+      response.redirect('./display_products.html?products_key=Whiskey'); //all good! => to invoice w/data
    } else {
       request.body['registration_errors'] = JSON.stringify(registration_errors);
       let params = new URLSearchParams(request.body);

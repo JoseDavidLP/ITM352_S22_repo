@@ -46,11 +46,12 @@ function isNonNegInt(q, return_errors = false) {
             document.stop;
         }
         var products_data;
+        var total = 0;
         loadJSON('get_products_data', function(response) {
             // Parsing JSON string into object
             products_data = JSON.parse(response);
         });
-        var total = 0;
+        
         loadJSON('get_cart', function(response) {
             // Parsing JSON string into object
             shopping_cart = JSON.parse(response);
@@ -80,15 +81,12 @@ function isNonNegInt(q, return_errors = false) {
     
     <script>
         // This is to print out whether the user can log in or not
-        // If there is no username in the session, we generate a log in button
-        // If there IS a username, I want to display the username and a logout button
-        // Now I should also implement a way to show number of items in the cart but maybe later
         if (typeof user_info == 'undefined'){
             document.write(`
-            <a class="active" href="./login.html?products_key=Whiskey"> Login Here</a>`)
+            <a class="active" href="./login.html?products_key=Whiskey" style='color: darkgreen;'> Login Here</a>`)
         } else {
             document.write(`
-            <a class="active" href="/logout">Hey ${user_info}, Logout?</a>`)
+            <a class="active" href="/logout" style='color: darkgreen;'>Hey ${user_info}, Logout?</a>`)
         }
     </script>
 
