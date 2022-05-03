@@ -1,0 +1,94 @@
+<!-- 
+Jose Pangelinan
+Assignment 2
+Shop page, this is the format and design for the shop page 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+   
+    <script src="./functions.js"></script>
+    <script>
+      // get the query string
+      let params = (new URL(document.location)).searchParams;
+        if (params.has('products_key')) {
+            var this_product_key = params.get('products_key');
+        } else {
+            document.write('no products key in query string');
+            document.stop;
+        }
+        var products_data;
+        loadJSON('get_products_data', function(response) {
+            // Parsing JSON string into object
+            products_data = JSON.parse(response);
+        });
+        var total = 0;
+        loadJSON('get_cart', function(response) {
+            // Parsing JSON string into object
+            shopping_cart = JSON.parse(response);
+            for (pk in shopping_cart) {
+                total += shopping_cart[pk].reduce((a, b) => a + b);
+            }
+        });
+    </script>
+    
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterOfLife International Store</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
+    <script src="../products.js"></script>
+    <title>Water Of Life</title>
+    
+</head>
+
+<body>
+    <!-- Consistent formatting of logo and tagline -->
+     <!-- Website Logo -->
+     <div class="homepageLogo">
+        <a href="./index.html">
+            <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
+        </a>
+    </div>
+    <br>
+
+    <!-- Tagline -->
+    <div class="tagline">
+        <i>Taste the Water of Life</i>
+    </div>
+
+    <!-- Text content -->
+    <p style="text-align: center;">To make your online order, enter the quantity you would like underneath each product. Click the Place Order button at the bottom of the page to submit your order and receive a receipt.</p><br>
+
+    <!-- Displays products and POST to ./process_form -->
+    <div class="products">
+        <form name="quantity_form" action="./process_form" method="POST">
+            <main class="products">
+                <script>
+          
+                 for (i in products) {
+          document.write(`
+            <section class="item">
+            <h2>${products[i].item}</h2>
+            <img src="${products[i].image}" height="200px">
+            <p>$${products[i].price}</p>
+            <p> Quantity: ${products[i].quantity_available}</p>
+            <p>${products[i].description}</p>
+            <center><input type="text" placeholder="Enter Quantity" name="quantity[${i}]" onkeyup="checkQuantityTextbox(this);"></center><br>
+        </section>
+        `);
+        }
+                </script>
+            </main>
+            <!-- Insert purchase button -->
+            <input class="purchasebutton" type="submit" name="purchase_order" value="Place Order">
+        </form>
+    </div>
+
+</body>
+<footer class="center">
+    Copywrite 2022 WaterOfLife international Corporation
+</footer>
+</html>

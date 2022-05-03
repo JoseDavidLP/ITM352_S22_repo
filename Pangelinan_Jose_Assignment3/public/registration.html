@@ -1,0 +1,79 @@
+
+<!-- 
+Jose Pangelinan
+Assignment 2
+Registration page, this page allows users to register(enter name, email, password)
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="./login.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+
+let params = (new URL(document.location)).searchParams;
+    // get the query string which has the form data
+
+    window.onload = function() {
+        // check whether username is valid then redirect to invoice if ok.
+        if (params.has('reg_errors')) {
+            var errors = JSON.parse(params.get('reg_errors'));
+
+            for (i = 0; i < register_form.elements.length; i++) {
+                register_form[i].value = params.get(register_form[i].name);
+                if (typeof errors[register_form[i].name] != 'undefined') {
+                    document.getElementById(register_form[i].name + '_error').innerHTML = errors[register_form[i].name];
+                }
+            }
+        }
+    }
+</script>
+
+<body>
+  
+<!-- Simple design for the register page-->
+    <center><h2>Create your new account!</h2></center>
+    <center>
+        <form name="register_form" action="./register" method="POST">
+
+            <div class="form-outline mb-4">
+              <input placeholder="Email" type="text" name="email" id="email"
+                class="form-control form-control-lg" />
+              <label class="form-label" name="email_label" for="email"></label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <input placeholder="Full Name" type="text" name="fullname" id="fullname"
+                class="form-control form-control-lg" />
+              <label class="form-label" id="fullname_label" for="fullname"></label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <input placeholder="Password" name="password" type="password" id="password"
+                class="form-control form-control-lg" />
+              <label class="form-label" id="password_label" for="password"></label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <input placeholder="Repeat your password" name="repeat_password" type="password"
+                id="repeat_password" class="form-control form-control-lg" />
+              <label class="form-label" id="repeat_password_label" for="repeat_password"></label>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary btn-block btn-light">Register</button>
+            </div>
+            <!--Link to redirect to login if user has an account-->
+            <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="login.html"
+                class="fw-bold text-body"><u>Login here</u></a></p>
+
+    </center>
+</body>
+<footer>
+  Copywrite 2022 WaterOfLife international Corporation
+</footer>
+</html>
