@@ -137,7 +137,6 @@ app.post("/process_login", function (request, response) { //modified from Tiffan
    var user_email = request.body['email'].toLowerCase();
    var the_password = request.body['password']
    var login_username = request.body['name']
-
    //check if username exists, then if entered password matches, lab 13 ex3-4
    if (typeof users[user_email] != 'undefined') {
       //check if entered password matches the stored password
@@ -165,6 +164,25 @@ app.post("/process_login", function (request, response) { //modified from Tiffan
    let params = new URLSearchParams(errors);
    params.append('email', user_email); //put username into params
    response.redirect(`./login.html?` + params.toString());
+});
+
+/* ------------------LOGOUT FORM------------- */
+app.get("/logout", function (request, response) { //Gets the get request to use logout function
+   var user_info = request.cookies["user_info"]; // makes user info javascript so it can be defined 
+   console.log(JSON.stringify(user_info));
+   if (user_info != undefined) {
+       var username = user_info["name"]; //checks to see whos logged in, needed to see if any user is logged in
+
+       logout_msg = `<script>alert('You have logged out! Log back in to continue shopping.'); location.href="./index.html";</script>`; //redirects to index, start of store
+       response.clearCookie('user_info'); //destroys cookie and user information
+       response.send(logout_msg); //if logged out, send message to user
+
+   } else { //if no user is logged in, then display error message & redirect to index (store entry)
+       console.log("in here");
+       logouterror_msg = `<script>alert("You are not logged in."); location.href="./index.html";</script>`;
+       response.send(logouterror_msg);
+
+   }
 });
 
 /*----------------REGISTRATION PAGE--------------*/
@@ -346,7 +364,7 @@ app.post('/process_form', function (request, response, next) { //modified from T
    }
 });
 
-console.log(products_data);
+
 
 // route all other GET requests to files in public 
 app.use(express.static(__dirname + '/public'));

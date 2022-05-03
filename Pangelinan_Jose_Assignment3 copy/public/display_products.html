@@ -19,6 +19,24 @@ Shop page, this is the format and design for the shop page
     <title>Water Of Life</title>
     <script src="./functions.js"></script>
     <script>
+
+function isNonNegInt(q, return_errors = false) {
+        errors = []; // assume no errors at first
+        if (q == '') q = 0; // handle blank inputs as if they are 0
+        if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+        else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+        else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+        return return_errors ? errors : (errors.length == 0);
+    }
+
+    //This function looks at the textbox and shows if the input is not valid
+    function checkQuantityTextbox(theTextbox) {
+        errs = isNonNegInt(theTextbox.value, true);
+        if (errs.length == 0) errs = ['You want:'];
+        if (theTextbox.value.trim() == '') errs = ['How many? '];
+        document.getElementById(theTextbox.name + '_label').innerHTML = errs.join(", ");
+    }
+
       // get the query string
       let params = (new URL(document.location)).searchParams;
         if (params.has('products_key')) {
@@ -40,6 +58,8 @@ Shop page, this is the format and design for the shop page
                 total += shopping_cart[pk].reduce((a, b) => a + b);
             }
         });
+        
+
     </script>
 </head>
 <body>
@@ -53,16 +73,25 @@ Shop page, this is the format and design for the shop page
                 document.write(`<a style='color: darkgreen;' href='./display_products.html?products_key=${products_key}'>${products_key}<a>&nbsp&nbsp&nbsp;`);
             }
         </script>
-    
-        <a href="login.html" style='color: darkgreen;'>Login</a>
-	
-        <a href="/logout" style='color: darkgreen;'>Logout</a>
-    
         <a href="./cart.html" style='color: darkgreen;'>View Cart (<span id="cart_total">0</span>)</a>
         <script>
             cart_total.innerHTML = total;
         </script>
     
+    <script>
+        // This is to print out whether the user can log in or not
+        // If there is no username in the session, we generate a log in button
+        // If there IS a username, I want to display the username and a logout button
+        // Now I should also implement a way to show number of items in the cart but maybe later
+        if (typeof user_info == 'undefined'){
+            document.write(`
+            <a class="active" href="./login.html?products_key=Whiskey"> Login Here</a>`)
+        } else {
+            document.write(`
+            <a class="active" href="/logout">Hey ${user_info}, Logout?</a>`)
+        }
+    </script>
+
 <!-- Consistent formatting of logo and tagline -->
      <!-- Website Logo -->
      <div class="homepageLogo">

@@ -104,3 +104,10 @@ footer {
 a {
     text-decoration: none;
 }
+
+.invoiceTable {
+    font-family: 'Josefin Sans', sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
