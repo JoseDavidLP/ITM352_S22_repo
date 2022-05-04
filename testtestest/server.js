@@ -20,13 +20,30 @@ app.post("/get_products_data", function (request, response) {
 });
 
 app.get("/add_to_cart", function (request, response) {
+  console.log(request.session);
     var products_key = request.query['products_key']; // get the product key sent from the form post
     var quantities = request.query['quantities'].map(Number); // Get quantities from the form post and convert strings from form post to numbers
     request.session.cart[products_key] = quantities; // store the quantities array in the session cart object with the same products_key. 
     response.redirect('./cart.html');
+    console.log(request.session);
+});
+// posting to cart USE THIS FOR ASS3
+app.post("/update_cart", function (request, response) {
+    console.log(request.session);
+    //storing products in the session as the product key as a way to access it
+    var prod_key = request.body.products_key;
+    //getting a cart
+    if(typeof request.session.cart == 'undefined'){
+      request.session.cart = {};
+    }
+    //adding to cart 
+    request.session.cart[prod_key] = request.body.quantities
+    console.log(request.session);
+    response.redirect(`display_products.html?products_key=${prod_key}`);
+ 
 });
 
-app.get("/get_cart", function (request, response) {
+app.post("/get_cart", function (request, response) {
     response.json(request.session.cart);
 });
 

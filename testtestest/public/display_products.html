@@ -10,12 +10,18 @@
             document.write('no products key in query string');
             document.stop;
         }
-
+        
         var products_data;
         loadJSON('get_products_data', function (response) {
             // Parsing JSON string into object
             products_data = JSON.parse(response);
         });
+        var cart;
+        loadJSON('get_cart', function (response) {
+            // Parsing JSON string into object
+            products_data = JSON.parse(response);
+        });
+    </script>
     </script>
 </head>
 <center>
@@ -38,17 +44,21 @@
         order_str += `<h1>Please select what ${this_products_key} you want</h1><br>`;
         // We put the whole table in the form so that anything entered in it will get submitted
         order_str += `
-            <FORM action="" method="GET">
+            <FORM action="/update_cart" method="POST">
             <INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_products_key}">
                 <TABLE BORDER>
                     <TR><TD><B><BIG>Description</TD><TD><B><BIG>Price</TD><TD><B><BIG>Quantity Desired</TD></TR>`;
 
         for (i = 0; i < products.length; i++) {
+            var qty = 0;
+            if(typeof cart[this_products_key] != 'undefined'){
+                qty = cart[this_products_key][i];
+            }
             order_str += `<TR><TD>${products[i]['name']}</TD><TD>${products[i]['price']}</TD><TD>
-                <INPUT TYPE="TEXT"  name="quantities[${i}]"></TD></TR>`;
+                <INPUT TYPE="TEXT"  name="quantities[${i} value="${qty}]"></TD></TR>`;
         }
         order_str += `</TABLE><br>
-<INPUT TYPE="SUBMIT"  name="Submit" value="Select">
+<INPUT TYPE="SUBMIT"  name="Submit" value="Update cart">
 </FORM>`;
     } // this closes the else for the form and table display
     document.write(order_str);

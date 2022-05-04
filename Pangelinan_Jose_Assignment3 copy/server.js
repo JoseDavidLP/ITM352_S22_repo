@@ -81,21 +81,25 @@ app.get("/add_to_cart", function (request, response) {
 
 });
 
+app.post("/update_cart", function (request, response) {
+   console.log(request.session);
+   //storing products in the session as the product key as a way to access it
+   var prod_key = request.body.products_key;
+   //getting a cart
+   if(typeof request.session.cart == 'undefined'){
+     request.session.cart = {};
+   }
+   //adding to cart 
+   request.session.cart[prod_key] = request.body.quantities
+   console.log(request.session);
+   response.redirect(`display_products.html?products_key=${prod_key}`);
+
+});
+
+
 app.get("/get_cart", function (request, response) {
    response.json(request.session.cart);
 });
-app.get("/session_data.js", function (request, response, next) {
-   response.type('.js');
-   // declare a shopping cart if there isn't one
-   if (typeof request.session.cart == 'undefined') {
-       request.session.cart = {};
-   }
-   // now to declare the username, email, name 
-   // Gonna keep all the data into one long Javascript string with the data as variables
-   var session_str = `var user_name = ${JSON.stringify(request.session.username)}; var full_name = ${JSON.stringify(request.session.full_name)}; var user_email = ${JSON.stringify(request.session.email)}; var cart_data = ${JSON.stringify(request.session.cart)};`;
-   // send the client the session string
-   response.send(session_str);
-})
 
 app.get("/checkout", function (request, response) {
   // Generate HTML invoice string
@@ -254,7 +258,7 @@ app.post("/register", function (request, response) { //modified from Tiffany You
       qty_data_obj['email'] = reg_email;
       qty_data_obj['fullname'] = users[reg_email]['fullname'];
       let params = new URLSearchParams(qty_data_obj);
-      response.redirect('./display_products.html?products_key=Whiskey'); //all good! => to invoice w/data
+      response.redirect('./display_products.html?products_key=Whiskey'); //all good! => to whiskey page
    } else {
       request.body['registration_errors'] = JSON.stringify(registration_errors);
       let params = new URLSearchParams(request.body);
