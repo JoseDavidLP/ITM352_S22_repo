@@ -57,12 +57,38 @@
     <th>Quantity</th>
     <th>Price</th>
     <script>
-        for (product_key in products_data) {
-            for (i = 0; i < products_data[product_key].length; i++) {
-                if (typeof shopping_cart[product_key] == 'undefined') continue;
-                qty = shopping_cart[product_key][i];
-                if (qty > 0) {
-                    document.write(`<tr><td>${products_data[product_key][i].item}</td><td>${qty}</td><td>${products_data[product_key][i].price}</td><tr>`);
+          let subtotal = 0;
+        let total_quantity = total;
+        for (product_key in cart_data) {
+            for (i in cart_data[product_key]) {
+                let q = cart_data[product_key][i];
+                // This checks if there is a value in the array  of quantities
+                // this will take those values to come up with the sub total
+                // if its a 0, it'll just skip it
+                // if its not, then we will generate the rows
+                if (q == 0) {
+                    continue;
+                }
+                else {
+                    // Gonna add the main header of the table here so it doesn't get generated unless theres items in there...
+                    
+                    // must calculate extended price if there is more than 1 item purchased
+                    extended_price = products_data[product_key][i]['price'] * q;
+                    // Now just add the extended price to the subtotal
+                    subtotal = subtotal + extended_price;
+                    let row = `<tr>
+                                        <td>
+                                            ${products_data[product_key][i]['name']}
+                                        </td>
+                                        <td>
+                                            <input type="number" value="${q}" name="cart_update_${product_key}_${i}"min="0" max="${products_data[product_key][i]['quantity_available']}" id="quantity_input" ></input> 
+                                        </td>
+                                        <td>
+                                            $${products_data[product_key][i]['price']}
+                                        </td>
+                                        <td>$${extended_price.toFixed(2)}</td>
+                                    </tr>`;
+                    document.write(row);
                 }
             }
         }

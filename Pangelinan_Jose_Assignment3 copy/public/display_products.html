@@ -112,7 +112,7 @@ function isNonNegInt(q, return_errors = false) {
     </script>
     <!-- Displays products and POST to ./process_form -->
     <div class="products">
-      <FORM action="/add_to_cart" method="post">
+      <FORM action="/update_cart" method="POST">
         <INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">
             <main class="products">
         <script>
@@ -129,8 +129,6 @@ function isNonNegInt(q, return_errors = false) {
         </section>
         `);
             }
-
-
         </script>
         </main>
 </div>

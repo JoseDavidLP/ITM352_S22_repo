@@ -20,7 +20,6 @@ var fs = require('fs')
 const qs = require('querystring');
 var app = express();
 
-var session = require('express-session');
 var products_data = require(__dirname + '/products.json');
 
 //E3.js LAB 15 COOKIE and sessions
@@ -73,18 +72,17 @@ app.post("/get_products_data", function (request, response) {
 
 
 app.post("/add_to_cart", function(request, response) {
-   console.log(request.session);
-   //storing products in the session as the product key as a way to access it
-   var prod_key = request.body.products_key;
-   //getting a cart
-   if(typeof request.session.cart == 'undefined'){
-     request.session.cart = {};
-   }
-   //adding to cart 
-   request.session.cart[prod_key] = request.body.quantities
-   console.log(request.session);
-   console.log(prod_key);
-   response.redirect(`/cart.html`);
+      console.log(request.session);
+      //storing products in the session as the product key as a way to access it
+      var prod_key = request.body.products_key;
+      //getting a cart
+      if(typeof request.session.cart == 'undefined'){
+        request.session.cart = {};
+      }
+      //adding to cart 
+      request.session.cart[prod_key] = request.body.quantities
+      console.log(request.session);
+      response.redirect(`display_products.html?products_key=${prod_key}`);
 });
 
 app.post("/update_cart", function (request, response) {

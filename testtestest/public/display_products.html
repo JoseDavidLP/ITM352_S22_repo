@@ -19,7 +19,7 @@
         var cart;
         loadJSON('get_cart', function (response) {
             // Parsing JSON string into object
-            products_data = JSON.parse(response);
+            cart = JSON.parse(response);
         });
     </script>
     </script>
@@ -55,7 +55,7 @@
                 qty = cart[this_products_key][i];
             }
             order_str += `<TR><TD>${products[i]['name']}</TD><TD>${products[i]['price']}</TD><TD>
-                <INPUT TYPE="TEXT"  name="quantities[${i} value="${qty}]"></TD></TR>`;
+                <INPUT TYPE="TEXT"  name="quantities[${i}]" value="${qty}"></TD></TR>`;
         }
         order_str += `</TABLE><br>
 <INPUT TYPE="SUBMIT"  name="Submit" value="Update cart">

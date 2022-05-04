@@ -2,103 +2,98 @@
    "Whiskey": [ 
     {
        "item" : "Four Roses Single Barrel",
-       "id_number" : 100001,
+     
        "price" : 50.00,
        "image" : "whiskeyphotos/fourroses.jpg",
-       "quantity_available" : 7,
+       "quantity_available" : 40,
        "description" : "Four Roses is a Kentucky bourbon that ticks all the right boxes—it’s affordable, has a variety of different expressions to choose from, and it tastes great on its own or mixed in a cocktail." 
     },
     {
         "item" : "Pikesville Straight Rye",
-        "id_number" : 100002,
+       
         "price" : 54.00,
         "image" : "whiskeyphotos/pikesville.jpg",
-        "quantity_available" : 10,
+        "quantity_available" : 75,
         "description" : "Two styles of rye whiskey dominate the whiskey market these days: rye made from a 95% to 100% rye mash bill; and the Kentucky-style mash bill that usually contains just above 50% rye." 
      },
      {
       "item" : "Henry Mckenna Single Barrel",
-      "id_number" : 100003,
+   
       "price" : 33.00,
       "image" : "whiskeyphotos/HenryMcKenna.jpg",
-      "quantity_available" : 5,
+      "quantity_available" : 80,
       "description" : "Produced at Heaven Hill Distillery, the Henry Mckenna Single Barrel is the only extra-aged, bottled-in-bond, single-barrel bourbon currently available today." 
    },
    {
       "item" : "The Balvenie DoubleWood",
-      "id_number" : 100004,
+     
       "price" : 20.00,
       "image" : "whiskeyphotos/doublewood.jpg",
-      "quantity_available" : 4,
+      "quantity_available" : 100,
       "description" : "Among an abundance of single malt scotch to choose from, with various regions showcasing different styles and flavors, The Balvenie stands out as one of the best." 
    },
    {
       "item" : "West Cork 8-Year Single Malt",
-      "id_number" : 100005,
+    
       "price" : 33.00,
       "image" : "whiskeyphotos/westcork.webp",
-      "quantity_available" : 8,
+      "quantity_available" : 60,
       "description" : "West Cork produces a gorgeous single-malt that sees Irish barley and local spring water going into a hand-built copper pot still, with the resulting distillate matured for eight years in first-fill, flame-charred bourbon barrels." 
    },
    {
       "item" : "Lot No. 40 Whiskey",
-      "id_number" : 100006,
+  
       "price" : 35.00,
       "image" : "whiskeyphotos/lot40.webp",
-      "quantity_available" : 20, 
+      "quantity_available" : 90, 
       "description" : "A 100% rye whisky that is distilled at Hiram Walker in Windsor, Ontario. Look for a little bit of spice here, but overall this is a smooth sipper with notes of cocoa and caramel that pop in the palate." 
    }
 ],
 "Beer":[
    {
-      "item" : "Lot No. 40 Whiskey",
-      "id_number" : 100006,
-      "price" : 35.00,
-      "image" : "whiskeyphotos/lot40.webp",
-      "quantity_available" : 2, 
+      "item" : "Bud Light",
+      "price" : 3.00,
+      "image" : "whiskeyphotos/BUDLIGHT.jpg",
+      "quantity_available" : 500, 
+      "description" : "Introduced nationally in 1982, Bud Light is brewed with a malt and hops ratio different from Budweiser for a distinctively crisp taste with fewer calories." 
+   },
+   {
+      "item" : "Asahi Super Dry",
+      "price" : 4.00,
+      "image" : "whiskeyphotos/ASAHI.jpg",
+      "quantity_available" : 600, 
       "description" : "A 100% rye whisky that is distilled at Hiram Walker in Windsor, Ontario. Look for a little bit of spice here, but overall this is a smooth sipper with notes of cocoa and caramel that pop in the palate." 
    },
    {
-      "item" : "Lot No. 40 Whiskey",
-      "id_number" : 100006,
-      "price" : 35.00,
-      "image" : "whiskeyphotos/lot40.webp",
-      "quantity_available" : 2, 
-      "description" : "A 100% rye whisky that is distilled at Hiram Walker in Windsor, Ontario. Look for a little bit of spice here, but overall this is a smooth sipper with notes of cocoa and caramel that pop in the palate." 
-   },
-   {
-      "item" : "Lot No. 40 Whiskey",
-      "id_number" : 100006,
-      "price" : 35.00,
-      "image" : "whiskeyphotos/lot40.webp",
-      "quantity_available" : 2, 
-      "description" : "A 100% rye whisky that is distilled at Hiram Walker in Windsor, Ontario. Look for a little bit of spice here, but overall this is a smooth sipper with notes of cocoa and caramel that pop in the palate." 
+      "item" : "Guinness Draught",
+      "price" : 3.00,
+      "image" : "whiskeyphotos/Guinness.jpg",
+      "quantity_available" : 700, 
+      "description" : "Nitro-can, nitro-keg and nitro-bottle; Filtered Usually called Draught; sometimes called Cold or Extra Cold - same beer, but served colder. Abv ranges from 4.1 to 4.3 % depending on where it was brewed - Guinness exports a hopped and concentrated wort to regional breweries who then brew it on site. Launched in 1961." 
    }
 ],
 "Wine":[
    {
-      "item" : "Lot No. 40 Whiskey",
-      "id_number" : 100006,
-      "price" : 35.00,
-      "image" : "whiskeyphotos/lot40.webp",
-      "quantity_available" : 2, 
-      "description" : "A 100% rye whisky that is distilled at Hiram Walker in Windsor, Ontario. Look for a little bit of spice here, but overall this is a smooth sipper with notes of cocoa and caramel that pop in the palate." 
+      "item" : "Dominus Estate Napa Valley 2018",
+      "price" : 200.00,
+      "image" : "whiskeyphotos/WINE1.jpg",
+      "quantity_available" : 100, 
+      "description" : "Dominus Estate is the Napa Valley property of Bordeaux producer Christian Moueix. The wine is bottled from the historic Napanook Vineyard. Located at the foothills of the Mayacamas, the vineyard was planted in 1838 and continues to evolve under the stewardship of Christian Moueix." 
    },
    {
-      "item" : "Lot No. 40 Whiskey",
-      "id_number" : 100006,
-      "price" : 35.00,
-      "image" : "whiskeyphotos/lot40.webp",
-      "quantity_available" : 2, 
-      "description" : "A 100% rye whisky that is distilled at Hiram Walker in Windsor, Ontario. Look for a little bit of spice here, but overall this is a smooth sipper with notes of cocoa and caramel that pop in the palate." 
+      "item" : "Château Pichon Longueville Lalande Pauillac 2018",
+      "price" : 175.00,
+      "image" : "whiskeyphotos/WINE2.png",
+      "quantity_available" : 100, 
+      "description" : "Offers a deep well of dark currant blackberry paste and plum preserves fruit that needs time to unwind fully as it?s shrouded in warm earth tobacco singed cedar sweet bay leaf and savory notes. A ramrod of graphite adds to the strident structured feel. Cabernet Sauvignon Merlot Cabernet Franc and Petit Verdot." 
    },
    {
-      "item" : "Lot No. 40 Whiskey",
-      "id_number" : 100006,
-      "price" : 35.00,
-      "image" : "whiskeyphotos/lot40.webp",
-      "quantity_available" : 2, 
-      "description" : "A 100% rye whisky that is distilled at Hiram Walker in Windsor, Ontario. Look for a little bit of spice here, but overall this is a smooth sipper with notes of cocoa and caramel that pop in the palate." 
+      "item" : "Heitz Cabernet Sauvignon Oakville Martha's Vineyard 2016",
+    
+      "price" : 250.00,
+      "image" : "whiskeyphotos/WINE3.png",
+      "quantity_available" : 70, 
+      "description" : "The Palate of the Napa Valley Cabernet has always been reference point for the freshness and elegance that pure Cabernet Sauvignon is capable of achieving in the new world. The 2016 is not different. This cuvee continues to be the entry point for classically produced produced Cabernet Sauvignon in the Napa Valley." 
    }
 ]
 }
