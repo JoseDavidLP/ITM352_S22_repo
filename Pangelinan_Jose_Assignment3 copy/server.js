@@ -23,9 +23,6 @@ var app = express();
 var session = require('express-session');
 var products_data = require(__dirname + '/products.json');
 
-app.use(express.urlencoded({ extended: true }));
-app.use(session({secret: "MySecretKey", resave: true, saveUninitialized: true}));
-
 //E3.js LAB 15 COOKIE and sessions
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -74,11 +71,20 @@ app.post("/get_products_data", function (request, response) {
    response.json(products_data);
 });
 
-app.get("/add_to_cart", function (request, response) {
-   var products_key = request.query['products_key']; // get the product key sent from the form post
-   var quantities = request.query['quantities'].map(Number); // Get quantities from the form post and convert strings from form post to numbers
-   request.session.cart[products_key] = quantities; // store the quantities array in the session cart object with the same products_key. 
 
+app.post("/add_to_cart", function(request, response) {
+   console.log(request.session);
+   //storing products in the session as the product key as a way to access it
+   var prod_key = request.body.products_key;
+   //getting a cart
+   if(typeof request.session.cart == 'undefined'){
+     request.session.cart = {};
+   }
+   //adding to cart 
+   request.session.cart[prod_key] = request.body.quantities
+   console.log(request.session);
+   console.log(prod_key);
+   response.redirect(`/cart.html`);
 });
 
 app.post("/update_cart", function (request, response) {
@@ -92,7 +98,8 @@ app.post("/update_cart", function (request, response) {
    //adding to cart 
    request.session.cart[prod_key] = request.body.quantities
    console.log(request.session);
-   response.redirect(`display_products.html?products_key=${prod_key}`);
+   console.log(prod_key);
+   response.redirect(`/cart.html`);
 
 });
 
