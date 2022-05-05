@@ -18,6 +18,7 @@ Shop page, this is the format and design for the shop page
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
     <title>Water Of Life</title>
     <script src="./functions.js"></script>
+    <script src="/session_data.js"></script>
     <script>
 
 function isNonNegInt(q, return_errors = false) {
@@ -46,20 +47,17 @@ function isNonNegInt(q, return_errors = false) {
             document.stop;
         }
         var products_data;
-        var total = 0;
         loadJSON('get_products_data', function(response) {
             // Parsing JSON string into object
             products_data = JSON.parse(response);
         });
-        
-        loadJSON('get_cart', function(response) {
+        var cart;
+        loadJSON('get_cart', function (response) {
             // Parsing JSON string into object
-            shopping_cart = JSON.parse(response);
-            for (pk in shopping_cart) {
-                total += shopping_cart[pk].reduce((a, b) => a + b);
-            }
+            cart = JSON.parse(response);
         });
-        
+
+
 
     </script>
 </head>
@@ -74,20 +72,23 @@ function isNonNegInt(q, return_errors = false) {
                 document.write(`<a style='color: darkgreen;' href='./display_products.html?products_key=${products_key}'>${products_key}<a>&nbsp&nbsp&nbsp;`);
             }
         </script>
-        <a href="./cart.html" style='color: darkgreen;'>View Cart (<span id="cart_total">0</span>)</a>
+        <a href="./cart.html" style='color: darkgreen;'>View Cart (<span id="cart">0</span>)</a>
         <script>
             cart_total.innerHTML = total;
         </script>
     
     <script>
+
         // This is to print out whether the user can log in or not
         if (typeof user_info == 'undefined'){
             document.write(`
             <a class="active" href="./login.html?products_key=Whiskey" style='color: darkgreen;'> Login Here</a>`)
         } else {
             document.write(`
-            <a class="active" href="/logout" style='color: darkgreen;'>Hey ${user_info}, Logout?</a>`)
+            <a class="active" href="/logout" style='color: darkgreen;'>Hey ${user_info.name}, Logout?</a>`)
         }
+    
+    
     </script>
 
 <!-- Consistent formatting of logo and tagline -->
@@ -112,8 +113,11 @@ function isNonNegInt(q, return_errors = false) {
     </script>
     <!-- Displays products and POST to ./process_form -->
     <div class="products">
-      <FORM action="/update_cart" method="POST">
-        <INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">
+        <script>
+            document.write(`<FORM action="/add_to_cart?products_key=${this_product_key}" method="POST">`);
+            document.write(`<INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">`);
+            </script>
+             
             <main class="products">
         <script>
             var products = products_data[this_product_key];

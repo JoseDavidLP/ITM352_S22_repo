@@ -80,30 +80,29 @@ app.post("/add_to_cart", function(request, response) {
         request.session.cart = {};
       }
       //adding to cart 
-      request.session.cart[prod_key] = request.body.quantities
+      request.session.cart[prod_key] = request.body.quantity;
       console.log(request.session);
       response.redirect(`display_products.html?products_key=${prod_key}`);
 });
 
-app.post("/update_cart", function (request, response) {
-   console.log(request.session);
-   //storing products in the session as the product key as a way to access it
-   var prod_key = request.body.products_key;
-   //getting a cart
-   if(typeof request.session.cart == 'undefined'){
-     request.session.cart = {};
+
+// This will be used when ever a site needs to get info from the session like the cart or usrname
+app.get("/session_data.js", function (request, response, next) {
+   response.type('.js');
+   // declare a shopping cart if there isn't one
+   if (typeof request.session.cart == 'undefined') {
+       request.session.cart = {};
    }
-   //adding to cart 
-   request.session.cart[prod_key] = request.body.quantities
-   console.log(request.session);
-   console.log(prod_key);
-   response.redirect(`/cart.html`);
+   // now to declare the username, email, name 
+   // Gonna keep all the data into one long Javascript string with the data as variables
+   var session_str = `var user_name = ${JSON.stringify(request.session.name)}; var user_email = ${JSON.stringify(request.session.email)}; var cart_data = ${JSON.stringify(request.session.cart)};`;
+   // send the client the session string
+   response.send(session_str);
+})
 
-});
-
-
-app.get("/get_cart", function (request, response) {
+app.post("/get_cart", function (request, response) {
    response.json(request.session.cart);
+
 });
 
 app.get("/checkout", function (request, response) {
@@ -167,7 +166,7 @@ app.post("/process_login", function (request, response) { //modified from Tiffan
          qty_data_obj['fullname'] = users[user_email].name;
           //Gets variable for cookie to display username on pages
           var user_info = { "email": user_email, "name": qty_data_obj['fullname'], };
-          //Gives cookie a expiration time, it will hold user data for 30 minutes EXTRA CREDIT??
+          //Gives cookie a expiration time
           response.cookie('user_info', JSON.stringify(user_info), { maxAge: 30 * 60 * 1000 });
          //direct to invoice page **need to keep data
          let params = new URLSearchParams(qty_data_obj);
