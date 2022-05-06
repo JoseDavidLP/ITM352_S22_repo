@@ -192,13 +192,18 @@ console.log(user_info["name"]);
       } else {
         invoice_str += `<br>Your invoice was mailed to ${user_email}`;
       }
-      response.send(invoice_str);
+      response.redirect(`./invoice.html`);
     });
 }
   });
   
 
-
+  app.post("/exitinvoice", function (request, response) {
+   console.log('got the exit');
+   request.session.cart = {};
+   console.log(request.session.cart);
+   response.redirect('./index.html');
+})
   
 
 /* ------------------LOGIN FORM------------- */

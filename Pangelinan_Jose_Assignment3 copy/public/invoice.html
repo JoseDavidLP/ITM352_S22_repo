@@ -6,22 +6,22 @@ invoice page, this is to format and design the style of the invoice
 
 <!--invoice template from invoice3 WOD-->
 <!--get product data from server-->
-<script src="./products.js" type="text/javascript"></script>
-<script src="/user_data.json" type="json"></script>
-
+<script src="./functions.js"></script>
+<script src="/session_data.js"></script>
 <script>
-  let params = (new URL(document.location)).searchParams; //takes data from querystring
-  var quantities = []; //gets quantities to store
-  if (params.has('quantity')) {
-    quantities = JSON.parse(params.get(`quantity`)); //params gets quantity from purchase, parses string into a json object
-  }
-//name is wrong, back to login, borrowed from li xinfei.
-  //var email = [];
-  if (params.has('fullname')) {
-    var fullname = params.get(`fullname`);
-  } else {
-    window.location.href = "./login.html";
-  }
+    var products_data;
+    var total = 0;
+    loadJSON('get_products_data', function (response) {
+        // Parsing JSON string into object
+        products_data = JSON.parse(response);
+    });
+
+    loadJSON('get_cart', function (response) {
+        cart_info = JSON.parse(response);
+        for (product_key in cart_info) {
+            total += cart_info[product_key].reduce((a, b) => a + b);
+        }
+    });
 </script>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,100 +36,128 @@ invoice page, this is to format and design the style of the invoice
 </head>
 
 <body>
-
-<!-- Thank you line -->
-<div class="tagline">
-    <p>Thank you for shopping at WaterOfLife!</p>
+    <br>
+    </body>
+        
+        <script>cart_total.innerHTML = total;</script>
+        <br></div>
+     <!-- Website Logo -->
+     <div class="homepageLogo">
+        
+        <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
+    
 </div>
-<!-- Create table -->
-    <table border="2" class="center">
-        <tbody>
-            <tr>
-                <th width="43%">Item</th>
-                <th width="11%">Quantity</th>
-                <th width="13%">Price</th>
-                <th width="54%">Extended Price</th>
-            </tr>
-            <script>
-                subtotal = 0; //start subtotal with 0
-
-                //generate item rows for table
-                for (i = 0; i < products.length; i++) {
-                    if (quantities[i] > 0) {
-                        //calculate extended price
-                        extended_price = quantities[i] * products[i].price;
-                        subtotal += extended_price;
-                        //generate the product rows for table
-                        document.write(`
-                        <tr>
-                        <td width="43%">${products[i].item}</td>
-                        <td align="center" width="11%">${quantities[i]}</td>
-                        <td width="13%">\$${products[i].price}</td>
-                        <td width="54%">\$${extended_price.toFixed(2)}</td>
-                        </tr>
-                        `);
+<!-- Website Tagline -->
+<div class="tagline">
+    <i>Taste the Water of Life</i>
+</div>
+    
+        <table border="2" class="center">
+            <tbody>
+                <tr>
+                    <th width="43%">Item</th>
+                    <th width="11%">Quantity</th>
+                    <th width="13%">Price</th>
+                    <th width="54%">Extended Price</th>
+                </tr>
+                <script>
+                    subtotal = 0; //start subtotal with 0
+                    for(let p_key in cart_info){
+    
+                    var products = products_data[p_key];
+                    var quantities= cart_info[p_key];
+    
+                    //generate item rows for table
+                    for (i = 0; i < products.length; i++) {
+                        if (quantities[i] > 0) {
+                            //calculate extended price
+                            extended_price = quantities[i] * products[i].price;
+                            subtotal += extended_price;
+                            //generate the product rows for table
+    
+                            if (subtotal != 0) {
+                                document.write(`
+                            <tr>
+                            <td width="43%">${products[i].item}</td>
+                            <td align="center" width="11%">${quantities[i]}</td>
+                            <td width="13%">\$${products[i].price}</td>
+                            <td width="54%">\$${extended_price.toFixed(2)}</td>
+                            </tr>
+                            `);
+                        
+            } else {
+                document.write( `<tr>There are no items in your cart.Click <a href="./index.html">here</a> to start shopping!.</tr>`);
+                            }
+                          
+                        }
                     }
                 }
-                //Tax @4%
-                var tax_rate = .045;
-                var sales_tax = tax_rate * subtotal;
-
-                //Discount
-                var discount;
-                if (subtotal > 15 && subtotal < 30) {
-                    discount = 2.5;
-                } else if (subtotal >= 30 && subtotal < 75) {
-                    discount = 5;
-                } else {
-                    discount = subtotal * .15;
-                }
-
-                //Calculate Ggrand total
-                var grand_total = subtotal + sales_tax - discount;
+                    //Tax @4%
+                    var tax_rate = .045;
+                    var sales_tax = tax_rate * subtotal;
+    
+                    //Discount
+                    var discount;
+                    if (subtotal > 15 && subtotal < 30) {
+                        discount = 2.5;
+                    } else if (subtotal >= 30 && subtotal < 75) {
+                        discount = 5;
+                    } else {
+                        discount = subtotal * .15;
+                    }
+    
+                    //Calculate Ggrand total
+                    var grand_total = subtotal + sales_tax - discount;
+                </script>
+                <tr>
+                    <td colspan="4" width="100%">&nbsp;</td>
+                </tr>
+                <!-- sub-total, tax, discount, and total -->
+                <tr>
+                    <td colspan="3" width="67%">Sub-total</td>
+                    <td width="54%">$
+                        <script>
+                            document.write(subtotal.toFixed(2));
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%">HI Tax @ 4.5%
+                    </td>
+                    <td width="4%">$
+                        <script>
+                            document.write(sales_tax.toFixed(2));
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%">Online Order Discount</td>
+                    <td width="54%">$
+                        <script>
+                            document.write(discount.toFixed(2));
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%"><strong>Total</strong></td>
+                    <td width="54%"><b>$
+                <script>document.write(grand_total.toFixed(2));</script>
+              </b></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
             </script>
-            <tr>
-                <td colspan="4" width="100%">&nbsp;</td>
-            </tr>
-            <!-- sub-total, tax, discount, and total -->
-            <tr>
-                <td colspan="3" width="67%">Sub-total</td>
-                <td width="54%">$
-                    <script>
-                        document.write(subtotal.toFixed(2));
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" width="67%">HI Tax @ 4.5%
-                </td>
-                <td width="4%">$
-                    <script>
-                        document.write(sales_tax.toFixed(2));
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" width="67%">Online Order Discount</td>
-                <td width="54%">$
-                    <script>
-                        document.write(discount.toFixed(2));
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" width="67%"><strong>Total</strong></td>
-                <td width="54%"><b>$
-            <script>document.write(grand_total.toFixed(2));</script>
-          </b></td>
-            </tr>
-        </tbody>
-    </table>
+        </div>
+        </div>
     <!-- discount options -->
     <p>
         <br> A subtotal between $15 and $30 will include a $2.50 discount. <br> A subtotal between $30 and $75 will include a $5 discount. <br> Subtotals over $75 will include a 15% discount.
     </p>
-    <a href="./display_products.html">
-        <input type="button" name="to_products_display" value="Order More" onclick="window.location.href ='./display_products'">
+    <a>
+        <form action="./exitinvoice" method="post">
+        <input type="submit" class="button" style="float: right;" value="Back to Home">
+                </form>
     </a>
 </body>
 <footer>
