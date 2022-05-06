@@ -14,7 +14,6 @@
         if (params.has('products_key')) {
             var this_product_key = params.get('products_key');
         } else {
-            document.write('no products key in query string');
             document.stop;
         }
         var products_data;
@@ -26,33 +25,45 @@
         loadJSON('get_cart', function (response) {
             cart_info = JSON.parse(response);
             for (product_key in cart_info) {
-                total += cart_info[product_key].reduce((a, b) => a + b);
+                total += cart_info[product_key].reduce((a, b) => a*1 + b*1);
             }
         });
+
+        if(getCookie("user_info") != "" ){
+            var user_info= JSON.parse(getCookie("user_info"))
+        }
     </script>
 </head>
 <body>
 
-        <!-- Navigation bar -->
-     <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:75px">
-        <center>
-            <a href='index.html' style='color: darkgreen;'>Home</a>&nbsp&nbsp&nbsp;
-            <script>
-                for (products_key in products_data) {
-                    if (products_key == this_product_key) continue;
-                    document.write(`<a style='color: darkgreen;' href='./display_products.html?products_key=${products_key}'>${products_key}<a>&nbsp&nbsp&nbsp;`);
-                }
-            </script>
-        
-            <a href="login.html" style='color: darkgreen;'>Login</a>
-        
-            <a href="/logout" style='color: darkgreen;'>Logout</a>
-        
-            <a href="./cart.html" style='color: darkgreen;'>View Cart (<span id="cart_total">0</span>)</a>
-            <script>
-                cart_total.innerHTML = total;
-            </script>
+       <!-- Navigation bar -->
+ <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:75px">
+    <center>
+        <a href='index.html' style='color: darkgreen;'>Home</a>&nbsp&nbsp&nbsp;
+        <script>
+            for (products_key in products_data) {
+                if (products_key == this_product_key) continue;
+                document.write(`<a style='color: darkgreen;' href='./display_products.html?products_key=${products_key}'>${products_key}<a>&nbsp&nbsp&nbsp;`);
+            }
+        </script>
+        <a href="./cart.html" style='color: darkgreen;'>View Cart (<span id="cart_total">0</span>)</a>
+        <script>
+            cart_total.innerHTML = total;
+        </script>
     
+    <script>
+
+        // This is to print out whether the user can log in or not
+        if (typeof user_info == 'undefined'){
+            document.write(`
+            <a class="active" href="./login.html?products_key=Whiskey" style='color: darkgreen;'> Login Here</a>`)
+        } else {
+            document.write(`
+            <a class="active" href="/logout" style='color: darkgreen;'>Hey ${user_info.name}, Logout?</a>`)
+        }
+    
+    
+    </script>
 <div class="homepageLogo">
     <a href="./index.html">
         <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
@@ -61,8 +72,6 @@
 <br>
 </body>
     
-
-    <h2>You have <span id="cart_total">0</span> items in your shopping cart:</h2>
     <script>cart_total.innerHTML = total;</script>
     <br></div>
 
@@ -77,7 +86,11 @@
             </tr>
             <script>
                 subtotal = 0; //start subtotal with 0
-                var products = products_data[this_product_key];
+                for(let p_key in cart_info){
+
+                var products = products_data[p_key];
+                var quantities= cart_info[p_key];
+
                 //generate item rows for table
                 for (i = 0; i < products.length; i++) {
                     if (quantities[i] > 0) {
@@ -85,16 +98,24 @@
                         extended_price = quantities[i] * products[i].price;
                         subtotal += extended_price;
                         //generate the product rows for table
-                        document.write(`
+
+                        if (subtotal != 0) {
+                            document.write(`
                         <tr>
                         <td width="43%">${products[i].item}</td>
-                        <td align="center" width="11%">${quantities[i]}</td>
+                        <td align="center" width="11%"><input type="number" value="${quantities[i]}" name="cart_update_${p_key}_${i}"min="0" max="${products_data[product_key][i]['quantity_available']}" id="quantity_input" ></input></td>
                         <td width="13%">\$${products[i].price}</td>
                         <td width="54%">\$${extended_price.toFixed(2)}</td>
                         </tr>
                         `);
+                    
+        } else {
+            document.write( `<tr>There are no items in your cart.Click <a href="./index.html">here</a> to start shopping!.</tr>`);
+                        }
+                      
                     }
                 }
+            }
                 //Tax @4%
                 var tax_rate = .045;
                 var sales_tax = tax_rate * subtotal;
@@ -150,8 +171,21 @@
         </tbody>
     </table>
     </div>
+        </script>
     </div>
-    
+    </div>
+    <input type="submit" class="submit" name="update_cart_button" value="Update Cart">
+    <script>
+    if(user_info == undefined){
+        document.write(`<h3><font color="red">Hey, you must be logged in first before checking out!</font></h3>`)
+    } else {
+        document.write(`<form action="./cart_checkout?total=${total}" method="post">
+            <input type="submit" class="submit1" id="checkout_button" value="Checkout"`);
+            
+        }
+    </script>
+            <input type="submit" class="submit1" id="checkout_button" value="Checkout">
+            
     
 </body>
 </table>

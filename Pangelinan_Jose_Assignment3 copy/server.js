@@ -28,6 +28,8 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 var session = require('express-session');
 app.use(session({secret: "MySecretKey", resave: true, saveUninitialized: true}));
+//nodemailer https://www.w3schools.com/nodejs/nodejs_email.asp
+var nodemailer = require('nodemailer');
 
 //user data file
 var filename = 'user_data.json';
@@ -72,17 +74,50 @@ app.post("/get_products_data", function (request, response) {
 
 
 app.post("/add_to_cart", function(request, response) {
-      console.log(request.session);
-      //storing products in the session as the product key as a way to access it
-      var prod_key = request.body.products_key;
-      //getting a cart
-      if(typeof request.session.cart == 'undefined'){
-        request.session.cart = {};
+      // code below got inspiration from Brandon Marcos
+    console.log(request.body);
+    let params = new URLSearchParams(request.body);
+    // turn request body into usable variables
+    var product_key = request.body['products_key'];
+    var quantity_submit = request.body['quantity'];
+
+    // assume 0 errors
+    var errors = {};
+
+    // now to validate the submitted quantities
+    // This checks for whether it passes the isNonNegInt or if we have quantities available or not
+    for (i in products_data[product_key]) {
+        let q = quantity_submit[i];
+        if (isNonNegInt(q) == false) {
+            errors[`quantity[${i}]`] = `${q} is not a valid quantity!`;
+        } else {
+            if (q > products_data[product_key][i]['quantity_available']) {
+                errors[`quantity[${i}]`] = `We don't ${q} in stock!`;
+            }
+        }
+    }
+    if (Object.keys(errors).length === 0) {
+      if (typeof request.session.cart == 'undefined') {
+          // establishes a cart if there isn't one in the session
+          request.session.cart = {};
       }
-      //adding to cart 
-      request.session.cart[prod_key] = request.body.quantity;
-      console.log(request.session);
-      response.redirect(`display_products.html?products_key=${prod_key}`);
+      if (typeof request.session.cart[product_key] == 'undefined') {
+          // this creates an array in the cart based on the product_key and fills the entirety of it with 0
+          request.session.cart[product_key] = new Array(quantity_submit.length).fill(0);
+      }
+      for (i in request.session.cart[product_key]) {
+          // this adds the submitted quantities to the array based on the product key
+          request.session.cart[product_key][i] += Number(quantity_submit[i]);
+      }
+  } else {
+      // this is for when theres errors, takes the qty data and error data and puts it into the params and sends it back
+      // this code comes from my assignment 2, when I got help from proffesor Port
+      params.append('qty_data', JSON.stringify(request.body));
+      params.append('qty_errors', JSON.stringify(errors));
+  }
+   console.log(request.session);
+   response.redirect(`display_products.html?products_key=${product_key}`);
+   
 });
 
 
@@ -105,20 +140,33 @@ app.post("/get_cart", function (request, response) {
 
 });
 
-app.get("/checkout", function (request, response) {
-  // Generate HTML invoice string
-    var invoice_str = `Thank you for your order!<table border><th>Quantity</th><th>Item</th>`;
+
+
+app.post("/cart_checkout", function (request, response) {
+   var user_info= JSON.parse(request.cookies["user_info"]);
+  // Generate HTML invoice string / this is just to keep the webpage consistant in all pages
+  if (user_info["name"] == 'undefined') {
+   console.log(`username NOT found`);
+   response.redirect('/cart.html?NotLoggedIn');
+} else {
+console.log(`found a username`);
+//test to see if it is working
+console.log(user_info["name"]);
+    var invoice_str = ` 
+</div>Thank you for your order ${user_info["name"]}!<table border><th>Quantity</th><th>Item</th>`;
     var shopping_cart = request.session.cart;
+    
     for(product_key in products_data) {
       for(i=0; i<products_data[product_key].length; i++) {
           if(typeof shopping_cart[product_key] == 'undefined') continue;
           qty = shopping_cart[product_key][i];
           if(qty > 0) {
-            invoice_str += `<tr><td>${qty}</td><td>${products_data[product_key][i].name}</td><tr>`;
+            invoice_str += `<tr><td>${qty}</td><td>${products_data[product_key][i].item}</td><tr>  `;
           }
       }
   }
     invoice_str += '</table>';
+    
   // Set up mail server. Only will work on UH Network due to security restrictions
     var transporter = nodemailer.createTransport({
       host: "mail.hawaii.edu",
@@ -130,24 +178,27 @@ app.get("/checkout", function (request, response) {
       }
     });
   
-    var user_email = 'phoney@mt2015.com';
+    var user_email = user_info["email"];
     var mailOptions = {
       from: 'phoney_store@bogus.com',
       to: user_email,
       subject: 'Your phoney invoice',
       html: invoice_str
     };
-  
+    console.log(user_email);
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
-        invoice_str += '<br>There was an error and your invoice could not be emailed :(';
+        invoice_str += '<br>There was an error and your invoice could not be emailed';
       } else {
         invoice_str += `<br>Your invoice was mailed to ${user_email}`;
       }
       response.send(invoice_str);
     });
-   
+}
   });
+  
+
+
   
 
 /* ------------------LOGIN FORM------------- */
@@ -197,6 +248,8 @@ app.get("/logout", function (request, response) { //Gets the get request to use 
        logout_msg = `<script>alert('You have logged out! Log back in to continue shopping.'); location.href="./index.html";</script>`; //redirects to index, start of store
        response.clearCookie('user_info'); //destroys cookie and user information
        response.send(logout_msg); //if logged out, send message to user
+       request.session.destroy();
+       
 
    } else { //if no user is logged in, then display error message & redirect to index (store entry)
        console.log("in here");
