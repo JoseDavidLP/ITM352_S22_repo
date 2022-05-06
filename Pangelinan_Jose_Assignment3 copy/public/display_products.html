@@ -64,7 +64,34 @@ function isNonNegInt(q, return_errors = false) {
         if(getCookie("user_info") != "" ){
             var user_info= JSON.parse(getCookie("user_info"))
         }
+        
+        window.onload = function () {
+            let params = (new URL(document.location)).searchParams;
+            console.log(params);
+            console.log(location.search);
+            // For below, if theres errors in the qs, it takes it and puts it in the appropriate span...
+            if (params.has('qty_errors')) {
+                var errors = JSON.parse(params.get('qty_errors'));
+                var qty_data = JSON.parse(params.get('qty_data'));
 
+                for (i in products_data[products_key]) {
+                    // put back qty-data back into the form to make it sticky
+                    // document.getElementById(`quantity[${i}]`).value = qty_data[`quantity[${i}]`];
+                    // if theres an error for the input name/quantity, put the error into the corresponding span
+                    if (typeof errors[`quantity[${i}]`] != 'undefined') {
+                        document.getElementById(`quantity[${i}]` + '_error').innerHTML = errors[`quantity[${i}]`];
+                    }
+                    // if there is no error, turn the error blank to not show anything
+                    if (typeof errors[`quantity[${i}]`] == 'undefined') {
+                        document.getElementById(`quantity[${i}]` + '_error').innerHTML = " ";
+                    }
+                    if (errors == 'undefined') {
+                        let errors = {}
+                    }
+                    console.log(errors[`quantity[${i}]`]);
+                }
+            }            
+        }
     </script>
 </head>
 <body>

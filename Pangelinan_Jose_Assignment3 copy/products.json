@@ -70,6 +70,30 @@
       "image" : "whiskeyphotos/Guinness.jpg",
       "quantity_available" : 700, 
       "description" : "Nitro-can, nitro-keg and nitro-bottle; Filtered Usually called Draught; sometimes called Cold or Extra Cold - same beer, but served colder. Abv ranges from 4.1 to 4.3 % depending on where it was brewed - Guinness exports a hopped and concentrated wort to regional breweries who then brew it on site. Launched in 1961." 
+   },
+   {
+      "item" : "Zenne Y Frontera ",
+    
+      "price" : 8.00,
+      "image" : "whiskeyphotos/BEER4.jpg",
+      "quantity_available" : 600, 
+      "description" : "A traditional lambic, born in Belgium, is reddish-gold in appearance and mildly bitter with medium ABV. The 7% ABV Zenne y Frontera is meant to blur the lines between wine and beer—it’s aged for 12 months in 40-year-old oak casks and is the result of a collaboration between a brewmaster and sommelier." 
+   },
+   {
+      "item" : "Marshmallow Handjee",
+    
+      "price" : 8.00,
+      "image" : "whiskeyphotos/BEER5.jpg",
+      "quantity_available" : 600, 
+      "description" : "Higher in alcohol than its American and British counterparts, the complex and bold Russian imperial stout was first brewed in England for Peter the Great during a sojourn in the Isles. The curiously named, barrel-aged with vanilla beans, 15% ABV Marshmallow Handjee is a love-it-or-hate-it beer with many reviewers claiming that it's overwrought, which is kind of a hallmark of Russian imperial stouts." 
+   },
+   {
+      "item" : "Pliny The Younger",
+    
+      "price" : 9.00,
+      "image" : "whiskeyphotos/BEER6.jpg",
+      "quantity_available" : 600, 
+      "description" : "On the high end of both the IBU and ABV scales, imperial IPAs appear reddish to yellowish and are the strongest, hoppiest version of an IPA. Pliny the Younger, from Northern California’s Russian River Brewing, sits at 10.25% ABV and elicits much love from reviewers who report “flavors of pine, resin, citrus, herbal and earthy” and an overall experience that was “so smooth and so intense.”" 
    }
 ],
 "Wine":[
@@ -94,6 +118,30 @@
       "image" : "whiskeyphotos/WINE3.png",
       "quantity_available" : 70, 
       "description" : "The Palate of the Napa Valley Cabernet has always been reference point for the freshness and elegance that pure Cabernet Sauvignon is capable of achieving in the new world. The 2016 is not different. This cuvee continues to be the entry point for classically produced produced Cabernet Sauvignon in the Napa Valley." 
+   },
+   {
+      "item" : "Chalone Vineyard Estate Grown Pinot Noir 2019",
+    
+      "price" : 30.00,
+      "image" : "whiskeyphotos/WINE4.webp",
+      "quantity_available" : 70, 
+      "description" : "This is a big, bold, and balanced California Pinot. The alcohol is high for this grape, creating a sharpness on the nose that smells like cherries, cola, and a hint of soil. That sharpness weaves into the body of the wine, aiding the natural acidity and keeping the wine refreshing. The palate has a natural viscosity, keeping you thinking about the next sip." 
+   },
+   {
+      "item" : "Hirsch Vineyards East Ridge Pinot Noir 2018",
+    
+      "price" : 92.00,
+      "image" : "whiskeyphotos/WINE5.webp",
+      "quantity_available" : 70, 
+      "description" : "What a wonderful expression of Sonoma Pinot Noir. It is on the lighter side of this grape, but don’t let that fool you. The acidity is bright but does not compromise the fleshy fruit that smells like cherries with a whisper of cinnamon and earth. Chill this wine down a bit, and your mind will be blown." 
+   },
+   {
+      "item" : "Carlo Giacosa Barbaresco 'montefico' 2016",
+    
+      "price" : 46.00,
+      "image" : "whiskeyphotos/WINE6.jpg",
+      "quantity_available" : 70, 
+      "description" : "A whisper of oranges weaves through rustic cherry vibes. The aromas are in control. They tell you what to enjoy, layer by layer, as the wine blossoms in the glass. This Italian wine is elegant yet powerful, not letting the intense characteristics overwhelm the palate. So much balance. So much satisfaction." 
    }
 ]
 }

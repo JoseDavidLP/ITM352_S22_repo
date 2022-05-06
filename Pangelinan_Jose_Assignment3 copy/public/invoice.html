@@ -96,18 +96,18 @@ invoice page, this is to format and design the style of the invoice
                     var tax_rate = .045;
                     var sales_tax = tax_rate * subtotal;
     
-                    //Discount
-                    var discount;
-                    if (subtotal > 15 && subtotal < 30) {
-                        discount = 2.5;
-                    } else if (subtotal >= 30 && subtotal < 75) {
-                        discount = 5;
+                    //SHIPPING
+                    var shipping;
+                    if (subtotal > 500) {
+                        shipping = 0;
+                    } else if (subtotal >= 0 && subtotal < 150) {
+                        shipping = 10;
                     } else {
-                        discount = subtotal * .15;
+                        shipping = 15;
                     }
     
                     //Calculate Ggrand total
-                    var grand_total = subtotal + sales_tax - discount;
+                    var grand_total = subtotal + sales_tax + shipping;
                 </script>
                 <tr>
                     <td colspan="4" width="100%">&nbsp;</td>
@@ -134,7 +134,7 @@ invoice page, this is to format and design the style of the invoice
                     <td colspan="3" width="67%">Online Order Discount</td>
                     <td width="54%">$
                         <script>
-                            document.write(discount.toFixed(2));
+                            document.write(shipping.toFixed(2));
                         </script>
                     </td>
                 </tr>
@@ -150,13 +150,11 @@ invoice page, this is to format and design the style of the invoice
             </script>
         </div>
         </div>
-    <!-- discount options -->
-    <p>
-        <br> A subtotal between $15 and $30 will include a $2.50 discount. <br> A subtotal between $30 and $75 will include a $5 discount. <br> Subtotals over $75 will include a 15% discount.
-    </p>
+
+    
     <a>
         <form action="./exitinvoice" method="post">
-        <input type="submit" class="button" style="float: right;" value="Back to Home">
+        <input type="submit" class="button" style="float: right;" value="Continue Shopping">
                 </form>
     </a>
 </body>

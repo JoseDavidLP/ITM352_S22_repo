@@ -1,191 +1,221 @@
 
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
-    <link rel="stylesheet" href="style.css">
-    <script src="./functions.js"></script>
-    <script src="/session_data.js"></script>
-    <script>
-        let params = (new URL(document.location)).searchParams;
-        if (params.has('products_key')) {
-            var this_product_key = params.get('products_key');
-        } else {
-            document.stop;
-        }
-        var products_data;
-        var total = 0;
-        loadJSON('get_products_data', function(response) {
-            // Parsing JSON string into object
-            products_data = JSON.parse(response);
-        });
-        loadJSON('get_cart', function (response) {
-            cart_info = JSON.parse(response);
-            for (product_key in cart_info) {
-                total += cart_info[product_key].reduce((a, b) => a*1 + b*1);
-            }
-        });
-
-        if(getCookie("user_info") != "" ){
-            var user_info= JSON.parse(getCookie("user_info"))
-        }
-    </script>
-</head>
-<body>
-
-       <!-- Navigation bar -->
- <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:75px">
-    <center>
-        <a href='index.html' style='color: darkgreen;'>Home</a>&nbsp&nbsp&nbsp;
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+        <link rel="stylesheet" href="style.css">
+        <script src="./functions.js"></script>
+        <script src="/session_data.js"></script>
         <script>
-            for (products_key in products_data) {
-                if (products_key == this_product_key) continue;
-                document.write(`<a style='color: darkgreen;' href='./display_products.html?products_key=${products_key}'>${products_key}<a>&nbsp&nbsp&nbsp;`);
+            let params = (new URL(document.location)).searchParams;
+            if (params.has('products_key')) {
+                var this_product_key = params.get('products_key');
+            } else {
+                document.stop;
+            }
+            var products_data;
+            var total = 0;
+            loadJSON('get_products_data', function(response) {
+                // Parsing JSON string into object
+                products_data = JSON.parse(response);
+            });
+            loadJSON('get_cart', function (response) {
+                cart_info = JSON.parse(response);
+                for (product_key in cart_info) {
+                    total += cart_info[product_key].reduce((a, b) => a*1 + b*1);
+                }
+            });
+    
+            if(getCookie("user_info") != "" ){
+                var user_info= JSON.parse(getCookie("user_info"))
             }
         </script>
-        <a href="./cart.html" style='color: darkgreen;'>View Cart (<span id="cart_total">0</span>)</a>
-        <script>
-            cart_total.innerHTML = total;
-        </script>
+    </head>
+    <body>
     
-    <script>
-
-        // This is to print out whether the user can log in or not
-        if (typeof user_info == 'undefined'){
-            document.write(`
-            <a class="active" href="./login.html?products_key=Whiskey" style='color: darkgreen;'> Login Here</a>`)
-        } else {
-            document.write(`
-            <a class="active" href="/logout" style='color: darkgreen;'>Hey ${user_info.name}, Logout?</a>`)
-        }
-    
-    
-    </script>
-<div class="homepageLogo">
-    <a href="./index.html">
-        <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
-    </a>
-</div>
-<br>
-</body>
-    
-    <script>cart_total.innerHTML = total;</script>
-    <br></div>
-
-
-    <table border="2" class="center">
-        <tbody>
-            <tr>
-                <th width="43%">Item</th>
-                <th width="11%">Quantity</th>
-                <th width="13%">Price</th>
-                <th width="54%">Extended Price</th>
-            </tr>
+           <!-- Navigation bar -->
+     <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:75px">
+        <center>
+            <a href='index.html' style='color: darkgreen;'>Home</a>&nbsp&nbsp&nbsp;
             <script>
-                subtotal = 0; //start subtotal with 0
-                for(let p_key in cart_info){
-
-                var products = products_data[p_key];
-                var quantities= cart_info[p_key];
-
-                //generate item rows for table
-                for (i = 0; i < products.length; i++) {
-                    if (quantities[i] > 0) {
-                        //calculate extended price
-                        extended_price = quantities[i] * products[i].price;
-                        subtotal += extended_price;
-                        //generate the product rows for table
-
-                        if (subtotal != 0) {
-                            document.write(`
-                        <tr>
-                        <td width="43%">${products[i].item}</td>
-                        <td align="center" width="11%"><input type="number" value="${quantities[i]}" name="cart_update_${p_key}_${i}"min="0" max="${products_data[product_key][i]['quantity_available']}" id="quantity_input" ></input></td>
-                        <td width="13%">\$${products[i].price}</td>
-                        <td width="54%">\$${extended_price.toFixed(2)}</td>
-                        </tr>
-                        `);
+                for (products_key in products_data) {
+                    if (products_key == this_product_key) continue;
+                    document.write(`<a style='color: darkgreen;' href='./display_products.html?products_key=${products_key}'>${products_key}<a>&nbsp&nbsp&nbsp;`);
+                }
+            </script>
+            <a href="./cart.html" style='color: darkgreen;'>View Cart (<span id="cart_total">0</span>)</a>
+            <script>
+                cart_total.innerHTML = total;
+            </script>
+        
+        <script>
+    
+            // This is to print out whether the user can log in or not
+            if (typeof user_info == 'undefined'){
+                document.write(`
+                <a class="active" href="./login.html?products_key=Whiskey" style='color: darkgreen;'> Login Here</a>`)
+            } else {
+                document.write(`
+                <a class="active" href="/logout" style='color: darkgreen;'>Hey ${user_info.name}, Logout?</a>`)
+            }
+        
+        
+        </script>
+    <div class="homepageLogo">
+        <a href="./index.html">
+            <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
+        </a>
+    </div>
+    <br>
+    </body>
+        
+        <script>cart_total.innerHTML = total;</script>
+        <br></div>
+    
+    <center>
+        <table border="2" class="center">
+            <tbody>
+                <script>
                     
+                     if (total == 0){
+            
         } else {
-            document.write( `<tr>There are no items in your cart.Click <a href="./index.html">here</a> to start shopping!.</tr>`);
+            document.write(`FREE SHIPPING FOR ORDERS OVER $500 
+            <form action="./cart_update" method="post">
+                
+                                        <table border="2px">
+                                            <thead>
+                                                <th>
+                                                    ITem
+                                                </th>
+                                                <th>
+                                                    Quantity
+                                                </th>
+                                                <th>
+                                                    Price
+                                                </th>
+                                                <th>
+                                                    Extended Price
+                                                </th>
+                                            </thead>`);
+        };
+                    subtotal = 0; //start subtotal with 0
+                    for(let p_key in cart_info){
+    
+                    var products = products_data[p_key];
+                    var quantities= cart_info[p_key];
+    
+                    //generate item rows for table
+                    for (i = 0; i < products.length; i++) {
+                        if (quantities[i] > 0) {
+                            //calculate extended price
+                            extended_price = quantities[i] * products[i].price;
+                            subtotal += extended_price;
+                            //generate the product rows for table
+    
+                            if (total == 0 ) {
+                                document.write( `<tr>There are no items in your cart.Click <a href="./index.html">here</a> to start shopping!.</tr>`);
+                                console.log("no items");
+                        
+            } else {
+                 console.log("GOOD");
+                                document.write(`
+                            <tr>
+                            <td width="43%">${products[i].item}</td>
+                            <td align="center" width="11%"><input type="number" value="${quantities[i]}" name="cart_update_${product_key}_${i}"min="0" max="${products_data[product_key][i]['quantity_available']}" id="quantity_input" ></input></td>
+                            <td width="13%">\$${products[i].price}</td>
+                            <td width="54%">\$${extended_price.toFixed(2)}</td>
+                            </tr>
+                            `);
+    
+                            }
+                          
                         }
-                      
                     }
                 }
-            }
-                //Tax @4%
-                var tax_rate = .045;
-                var sales_tax = tax_rate * subtotal;
+                    //Tax @4%
+                    var tax_rate = .045;
+                    var sales_tax = tax_rate * subtotal;
+    
+                    //SHIPPING
+                    var shipping;
+                    if (subtotal > 500) {
+                        shipping = 0;
+                    } else if (subtotal >= 0 && subtotal < 150) {
+                        shipping = 10;
+                    } else {
+                        shipping = 15;
+                    }
+                    
+                    
 
-                //Discount
-                var discount;
-                if (subtotal > 15 && subtotal < 30) {
-                    discount = 2.5;
-                } else if (subtotal >= 30 && subtotal < 75) {
-                    discount = 5;
-                } else {
-                    discount = subtotal * .15;
-                }
+                    //Calculate Ggrand total
+                    var grand_total = subtotal + sales_tax + shipping;
 
-                //Calculate Ggrand total
-                var grand_total = subtotal + sales_tax - discount;
-            </script>
-            <tr>
-                <td colspan="4" width="100%">&nbsp;</td>
-            </tr>
-            <!-- sub-total, tax, discount, and total -->
-            <tr>
-                <td colspan="3" width="67%">Sub-total</td>
-                <td width="54%">$
-                    <script>
-                        document.write(subtotal.toFixed(2));
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" width="67%">HI Tax @ 4.5%
-                </td>
-                <td width="4%">$
-                    <script>
-                        document.write(sales_tax.toFixed(2));
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" width="67%">Online Order Discount</td>
-                <td width="54%">$
-                    <script>
-                        document.write(discount.toFixed(2));
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" width="67%"><strong>Total</strong></td>
-                <td width="54%"><b>$
-            <script>document.write(grand_total.toFixed(2));</script>
-          </b></td>
-            </tr>
-        </tbody>
-    </table>
-    </div>
-        </script>
-    </div>
-    </div>
-    <input type="submit" class="submit" name="update_cart_button" value="Update Cart">
-    <script>
-    if(user_info == undefined){
+                    if (total == 0 ) {
+                                document.write( `<tr>There are no items in your cart. Click <a href="./index.html" style="color:blue">HERE</a> to start shopping!.</tr>`);
+                                console.log("no items");
+                        
+            } else {
+                letgoodmsg =`
+                <tr>
+                    <td colspan="4" width="100%">&nbsp;</td>
+                </tr>
+                <!-- sub-total, tax, discount, and total -->
+                <tr>
+                    <td colspan="3" width="67%">Sub-total</td>
+                    <td width="54%">$
+                        
+                            ${subtotal.toFixed(2)}
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%">HI Tax @ 4.5%
+                    </td>
+                    <td width="4%">$
+                        
+                            ${sales_tax.toFixed(2)}
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%">Online Order shipping</td>
+                    <td width="54%">$
+                        
+                            ${shipping.toFixed(2)}
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%"><strong>Total</strong></td>
+                    <td width="54%"><b>$
+                ${grand_total.toFixed(2)}
+              </b></td>
+                </tr>
+            </tbody>
+        </table>
+            `;
+        document.write(letgoodmsg);
+        document.write(`<input type="submit" class="submit" name="update_cart_button" value="Update Cart">
+        </form>`)
+        if(user_info == undefined){
         document.write(`<h3><font color="red">Hey, you must be logged in first before checking out!</font></h3>`)
     } else {
         document.write(`<form action="./cart_checkout?total=${total}" method="post">
             <input type="submit" class="submit1" id="checkout_button" value="Checkout"`);
             
         }
-    </script>
-            <input type="submit" class="submit1" id="checkout_button" value="Checkout">
-            
+        }
+       
+
+                </script>
+                <br>
+               
+               
+        
+       
     
-</body>
-</table>

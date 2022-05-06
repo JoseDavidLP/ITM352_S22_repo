@@ -111,7 +111,6 @@ app.post("/add_to_cart", function(request, response) {
       }
   } else {
       // this is for when theres errors, takes the qty data and error data and puts it into the params and sends it back
-      // this code comes from my assignment 2, when I got help from proffesor Port
       params.append('qty_data', JSON.stringify(request.body));
       params.append('qty_errors', JSON.stringify(errors));
   }
@@ -140,7 +139,21 @@ app.post("/get_cart", function (request, response) {
 
 });
 
-
+app.post("/cart_update", function (request, response, next) {
+   console.log(request.body);
+   for (product_key in request.session.cart) {
+       for (i in request.session.cart[product_key]) {
+           // this is to basically skip quantities that are 0
+           // because if there is a 0, it creates a blank field in the cart, and thats an error
+           if (request.session.cart[product_key][i] == 0) {
+               continue;
+           }
+           request.session.cart[product_key][i] = Number(request.body[`cart_update_${product_key}_${i}`]);
+       }
+   }
+   console.log(request.session);
+   response.redirect("./cart.html");
+});
 
 app.post("/cart_checkout", function (request, response) {
    var user_info= JSON.parse(request.cookies["user_info"]);
