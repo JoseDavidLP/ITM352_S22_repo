@@ -114,36 +114,38 @@ function isNonNegInt(q, return_errors = false) {
     <!-- Text content -->
     <p style="text-align: center;">To make your online order, enter the quantity you would like underneath each product. Click the Place Order button at the bottom of the page to submit your order and receive a receipt.</p><br>
 
-    <script>
-        document.write(`<center><h2>${this_product_key}</h2></center>`);
-    </script>
-    <!-- Displays products and POST to ./process_form -->
-    <div class="products">
-        <script>
-            document.write(`<FORM action="/add_to_cart?products_key=${this_product_key}" method="POST">`);
-            document.write(`<INPUT TYPE="HIDDEN" NAME="products_key" VALUE="${this_product_key}">`);
-            </script>
-             
-            <main class="products">
-        <script>
-            var products = products_data[this_product_key];
-            
-            for (i = 0; i < products.length; i++) {
-                
-                document.write(`
-            <section class="item">
-            <p>${products[i].item}</p>
-            <img src="${products[i].image}" height="200px">
-            <p>$${products[i].price}</p>
-            <p> Quantity: ${products[i].quantity_available}</p>
-            <p>${products[i].description}</p>
-            <center><input type="text" placeholder="Enter Quantity" name="quantity[${i}]" onkeyup="checkQuantityTextbox(this);"><br><span class="span" id="quantity[${i}]_error"></center><br>
-        </section>
-        `);
+    search:<input type="text" id="search_textbox" onkeyup="search(this.value)"><br>
+    <script> function search(searchstring){
+            let elms = document.querySelectorAll(`[id*="${searchstring.toLowerCase}"]`);
+    
+            for(let e of elms){
+                e.style = "display:inline";
             }
+        }
         </script>
+ <!-- Displays products and POST to ./process_form -->
+ <div class="products">
+    <form name="quantity_form" action="./process_form" method="POST">
+        <main class="products">
+            <script>
+                for(let p_key in products_data){
+                    let products = products_data[p_key];
+             for (i in products) {
+      document.write(`
+        <section class="item" id="${p_key.toLowerCase} ${products[i].description.toLowerCase}" style="display:none">
+        <h2>${products[i].item}</h2>
+        <img src="${products[i].image}" height="200px">
+        <p>$${products[i].price}</p>
+        <p> Quantity: ${products[i].quantity_available}</p>
+        <p>${products[i].description}</p>
+        <center><input type="text" placeholder="Enter Quantity" name="quantity[${i}]" onkeyup="checkQuantityTextbox(this);"></center><br>
+    </section>
+    `);
+    }
+}
+            </script>
         </main>
-</div>
+
 
 <INPUT TYPE="SUBMIT" name="Submit" value="Add to Cart" style="margin-top: 15px;" class="w3-center w3-padding-16">
 </FORM>

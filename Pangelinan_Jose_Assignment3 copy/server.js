@@ -20,6 +20,7 @@ var fs = require('fs')
 const qs = require('querystring');
 var app = express();
 
+
 var products_data = require(__dirname + '/products.json');
 
 //E3.js LAB 15 COOKIE and sessions
@@ -63,7 +64,15 @@ app.all('*', function (request, response, next) {
    console.log(`Got a ${request.method} to path ${request.path}`);
    // need to initialize an object to store the cart in the session. We do it when there is any request so that we don't have to check it exists
    // anytime it's used
-   if(typeof request.session.cart == 'undefined') { request.session.cart = {}; } 
+   if(typeof request.session.cart == 'undefined') { 
+      request.session.cart = {};
+    } 
+      var backURL=request.header('referer') || "/";
+      if (backURL.includes("login") == false && backURL.includes("regist") == false && backURL.includes("newpw") == false && backURL.includes("update_info") == false) {
+         request.session.lastpage = backURL;
+      }
+      console.log(request.session.lastpage,backURL );
+
    next();
 });
 
@@ -152,6 +161,7 @@ app.post("/cart_update", function (request, response, next) {
        }
    }
    console.log(request.session);
+
    response.redirect("./cart.html");
 });
 
@@ -209,7 +219,6 @@ console.log(user_info["name"]);
     });
 }
   });
-  
 
   app.post("/exitinvoice", function (request, response) {
    console.log('got the exit');
@@ -240,7 +249,9 @@ app.post("/process_login", function (request, response) { //modified from Tiffan
          //direct to invoice page **need to keep data
          let params = new URLSearchParams(qty_data_obj);
          console.log(user_info);
-         response.redirect('./display_products.html?products_key=Whiskey');
+  response.redirect(request.session.lastpage);
+
+
          return;
       } else {
          //output password doesnt match
@@ -253,7 +264,7 @@ app.post("/process_login", function (request, response) { //modified from Tiffan
    //redirect to login with error message
    let params = new URLSearchParams(errors);
    params.append('email', user_email); //put username into params
-   response.redirect(`./login.html?` + params.toString());
+   response.redirect(`./login.html?`);
 });
 
 /* ------------------LOGOUT FORM------------- */

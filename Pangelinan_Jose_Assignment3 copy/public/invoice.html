@@ -22,6 +22,10 @@ invoice page, this is to format and design the style of the invoice
             total += cart_info[product_key].reduce((a, b) => a + b);
         }
     });
+    if(getCookie("user_info") != "" ){
+            var user_info= JSON.parse(getCookie("user_info"))
+        }
+
 </script>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +54,11 @@ invoice page, this is to format and design the style of the invoice
 <!-- Website Tagline -->
 <div class="tagline">
     <i>Taste the Water of Life</i>
+    <script>
+    document.write(`<p>Thank you for shopping with us! your invoice has bent sent to ${user_info.email}!</p>`);
+</script>
 </div>
+
     
         <table border="2" class="center">
             <tbody>

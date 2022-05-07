@@ -21,7 +21,8 @@ function nav_bar(this_product_key, products_data) {
         document.write(`<a href='./display_products.html?products_key=${products_key}'>${products_key}<a>&nbsp&nbsp&nbsp;`);
     }
 };
-
+// code from https://www.w3schools.com/js/js_cookies.asp 
+//from meeting with prof 
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
