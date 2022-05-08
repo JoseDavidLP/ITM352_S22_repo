@@ -114,25 +114,25 @@ function isNonNegInt(q, return_errors = false) {
     <!-- Text content -->
     <p style="text-align: center;">To make your online order, enter the quantity you would like underneath each product. Click the Place Order button at the bottom of the page to submit your order and receive a receipt.</p><br>
 
-    search:<input type="text" id="search_textbox" onkeyup="search(this.value)"><br>
-    <script> function search(searchstring){
-            let elms = document.querySelectorAll(`[id*="${searchstring.toLowerCase}"]`);
+     search:<input type="text" id="search_textbox" onkeyup="search()" placeholder="Search Products"><br>
     
-            for(let e of elms){
-                e.style = "display:inline";
-            }
-        }
-        </script>
+    
  <!-- Displays products and POST to ./process_form -->
- <div class="products">
+ <div class="products" id="products">
     <form name="quantity_form" action="./process_form" method="POST">
         <main class="products">
             <script>
+                
                 for(let p_key in products_data){
                     let products = products_data[p_key];
-             for (i in products) {
+                    console.log(products)
+                
+             for(i in products) {
+        
+                //i changed id"""
       document.write(`
-        <section class="item" id="${p_key.toLowerCase} ${products[i].description.toLowerCase}" style="display:none">
+      
+        <section class="item" style="display:none">
         <h2>${products[i].item}</h2>
         <img src="${products[i].image}" height="200px">
         <p>$${products[i].price}</p>
@@ -141,6 +141,7 @@ function isNonNegInt(q, return_errors = false) {
         <center><input type="text" placeholder="Enter Quantity" name="quantity[${i}]" onkeyup="checkQuantityTextbox(this);"></center><br>
     </section>
     `);
+   
     }
 }
             </script>

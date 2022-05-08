@@ -38,3 +38,25 @@ function getCookie(cname) {
     }
     return "";
   }
+
+  const search = () =>{
+    const searchbox = document.getElementById("search_textbox").value.toLowerCase();
+    const storeitems = document.getElementById("products");
+    const products = document.querySelectorAll(".item")
+    const pname = document.getElementsByTagName("h2")
+    const pdesc = document.getElementsByTagName("p")
+    for (var i = 0; i < pname.length; i++) {
+      let match = products[i].getElementsByTagName("h2", "p")[0];
+      
+      if (match) {
+        let textvalue = match.textContent || match.innerHTML
+        if (textvalue.toLowerCase().indexOf(searchbox) > -1) {
+          products[i].style.display = "";
+
+        }else{
+          products[i].style.display = "none";
+        }
+        
+      }
+    }
+}
