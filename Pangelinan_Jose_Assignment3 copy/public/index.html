@@ -5,6 +5,7 @@ Home page this is just a page to start on when shoppping
 -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,51 +13,63 @@ Home page this is just a page to start on when shoppping
     <title>WaterOfLife International Homepage</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Raleway:600,900,400' rel='stylesheet' type='text/css'>
-    
-    <script src="./functions.js"></script> 
+
+    <script src="./functions.js"></script>
     <script>
-    var products_data;
-    loadJSON('get_products_data', function(response) {
-         // Parsing JSON string into object
-         products_data = JSON.parse(response);
-    });
-    var this_product_key = ''
+        var products_data;
+        loadJSON('get_products_data', function (response) {
+            // Parsing JSON string into object
+            products_data = JSON.parse(response);
+        });
+        var this_product_key = ''
     </script>
 </head>
 
 <body>
-
-   
-    <!-- Website Logo -->
-    <div class="homepageLogo">
-        
-            <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
-        
-    </div>
-    <br>
-
-    <!-- Website Tagline -->
-    <div class="tagline">
-        <i>Taste the Water of Life</i>
-    </div>
-
-     <!-- Navigation bar -->
- <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:75px">
     <center>
-        <script>
-            for (products_key in products_data) {
-                if (products_key == this_product_key) continue;
-                document.write(`<a style='color: darkgreen;' href='./display_products.html?products_key=${products_key}'>${products_key}<a>&nbsp&nbsp&nbsp;`);
-            }
-        </script>
-        </center>
-    
+
+        <!-- Website Logo -->
+        <div class="homepageLogo">
+
+            <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
+
+        </div>
+        <br>
+
+        <!-- Website Tagline -->
+        <div class="tagline">
+            <i>Taste the Water of Life</i>
+        </div>
+
+        <!--using this format https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_food_blog&stacked=h-->
+        <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
+            <div class="w3-row-padding w3-padding-16 w3-center" id="food">
+                <div class="w3-third">
+                    <a href="display_products.html?products_key=Whiskey"><img src="whiskeyphotos/WHISKEYHOME.JPG"
+                            height="600px;margin:auto"></a>
+                </div>
+
+                <div class="w3-third">
+
+                    <a href="display_products.html?products_key=Beer"><img src="whiskeyphotos/BEERHOME.JPG"
+                            height="515px;margin:auto"></a>
+                </div>
+                <div class="w3-third">
+                    <a href="display_products.html?products_key=Wine"><img src="whiskeyphotos/WINEHOME.JPG"
+                            height="510px;margin:auto"> </a>
+                </div>
 
 
+            </div>
+
+
+    </center>
 </body>
 <footer>
     Copywrite 2022 WaterOfLife international Corporation
 </footer>
+
 </html>
