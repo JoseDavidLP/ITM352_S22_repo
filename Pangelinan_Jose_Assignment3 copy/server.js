@@ -1,27 +1,26 @@
+/*
+Jose Pangelinan
+Assignment 3
+June 8, 2022
+This is the server for store app 
+most of the code came from assignment 2 code but has been change a lot based on the needs of my website (see comments)
 
+used for: 
+   displaying products for beer whiskey and wine (6 products each)
+   give users session and cart where data is stored till checkout
+   track users login/logout -- will be personalized for every user
+   some features include:
+   login/logout/register/change data/
+   cart checkout/cart update/ add to cart/ 
+*/
 
-// This function asks the server for a "service" and converts the response to text. 
-
-
-//Jose Pangelinan
-//Assignment 3
-//This is the server for store app
-//CODE COPIED FROM ASSIGNMENT 2  |  MINOR CHANGES TO FIX ANY PAST ERRORS AND NEW IMPLEMENTATIONS 
-//modified from info_server_Ex5.js in Lab13 code
-//modified from info_server_EC.js in Lab13 code
-
-/*load product data*/
-var products = require(__dirname + '/products.json');
+//load product data
 var express = require('express');
-var app = express();
 var fs = require('fs')
 //file system module (login & registration)
 const qs = require('querystring');
 var app = express();
-
-
 var products_data = require(__dirname + '/products.json');
-
 //E3.js LAB 15 COOKIE and sessions
 //this will give the users cookies and defined the sessions
 // this will encrypt the cookies so that no one can pose and a different user
@@ -33,7 +32,6 @@ var session = require('express-session');
 app.use(session({secret: "MySecretKey", resave: true, saveUninitialized: true}));
 //nodemailer https://www.w3schools.com/nodejs/nodejs_email.asp
 var nodemailer = require('nodemailer');
-
 //user data file
 var filename = 'user_data.json';
 //store the data from purchase 
@@ -49,7 +47,7 @@ if (fs.existsSync(filename)) {
 //To access inputted data
 app.use(express.urlencoded({ extended: true }));
 
-
+//data validation tool
 function isNonNegInt(q, returnErrors = false) {
    //If returnErrors is true, array of errors is returned
     //others return true if q is a non-neg int.
@@ -61,41 +59,43 @@ function isNonNegInt(q, returnErrors = false) {
 
    return returnErrors ? errors : (errors.length == 0);
 }
-//UPDATED
+
+//UPDATED from meeting with prof port
+//adds req and res functions
+//allows for the server to get lastpage to redirect user to after successful login/register/update information
 app.all('*', function (request, response, next) {
    console.log(`Got a ${request.method} to path ${request.path}`);
-   // need to initialize an object to store the cart in the session. We do it when there is any request so that we don't have to check it exists
-   // anytime it's used
-   if(typeof request.session.cart == 'undefined') {  //this will give the user a cart if there is none
-      request.session.cart = {};
+   // need to initialize an object to store the cart in the session.
+   //this will give the user a cart if there is none
+   if(typeof request.session.cart == 'undefined') {  
+      request.session.cart = {}; //empty cart
     } 
     //code from office sessions with PROF PORT
       var backURL=request.header('referer') || "/"; // sets backURL to previouos page if page does not include "login", "update_info", "newpw", "regist"
       if (backURL.includes("login") == false && backURL.includes("regist") == false && backURL.includes("newpw") == false && backURL.includes("update_info") == false) {
          request.session.lastpage = backURL;
       }
-      console.log(request.session.lastpage,backURL ); // check to see if working ITS GOOD
+      console.log(request.session.lastpage,backURL ); // check to see if working and ITS GOOD!
 
    next();
 });
 
-
+//gets product data
 app.post("/get_products_data", function (request, response) {
    response.json(products_data);
 });
 
-
+/* ------------------ADD TO CART ------------------------------ADD TO CART-----------------------------------------ADD TO CART-------------------------------ADD TO CART----------------------------- */
 app.post("/add_to_cart", function(request, response) {
-      // code below got inspiration from Brandon Marcos
     console.log(request.body);
     let params = new URLSearchParams(request.body);
-    // turn request body into usable variables
+    // changs body into variables for easy use
     var product_key = request.body['products_key'];
     var quantity_submit = request.body['quantity'];
-    // set errors to 0
+    // errors is set to 0
     var errors = {};
-    // now to validate the submitted quantities
-    // This checks for whether it passes the isNonNegInt or if we have quantities available or not
+    // this validates the quantities
+    // This checks for whether it passes the isNonNegInt or if we have enough quantities for their order
     for (i in products_data[product_key]) {
         let q = quantity_submit[i];
         if (isNonNegInt(q) == false) {
@@ -120,7 +120,7 @@ app.post("/add_to_cart", function(request, response) {
           request.session.cart[product_key][i] += Number(quantity_submit[i]);
       }
   } else {
-      // this is for when theres errors, takes the qty data and error data and puts it into the params and sends it back
+      // if there are errors it will be sent back
       params.append('qty_data', JSON.stringify(request.body));
       params.append('qty_errors', JSON.stringify(errors));
   }
@@ -129,72 +129,155 @@ app.post("/add_to_cart", function(request, response) {
    
 });
 
-
+/* ------------------SAVING SESSION ------------------------------SAVING SESSION-------------------------------------------------SAVING SESSION--------------------------------SAVING SESSION---------- */
 // This will be used when ever a site needs to get info from the session like the cart or username
 app.get("/session_data.js", function (request, response, next) {
    response.type('.js');
-   // declare a shopping cart if there isn't one
+   // gives user shopping cart if there isnt any
    if (typeof request.session.cart == 'undefined') {
        request.session.cart = {};
    }
-   // now to declare the username, email, cart
-   // keeps the data in 1 variable under sessions string
+
+   // declare the username, email, cart and keeps the data in 1 variable under sessions string
    var session_str = `var user_name = ${JSON.stringify(request.session.name)}; var user_email = ${JSON.stringify(request.session.email)}; var cart_data = ${JSON.stringify(request.session.cart)};`;
    // send the client the session string just created
    response.send(session_str);
 })
+
+
+/* ------------------GET CART ----------------------------------GET CART---------------------------GET CART------------------------------------GET CART---------------GET CART------------------- */
 //get cart from workshop and code examples
 app.post("/get_cart", function (request, response) {
    response.json(request.session.cart);
 
 });
-//ADDED CART UPDATE
+
+
+//ASK ABOUT THIS//ASK ABOUT THIS//ASK ABOUT THIS//ASK ABOUT THIS//ASK ABOUT THIS//ASK ABOUT THIS//ASK ABOUT THIS//ASK ABOUT THIS//ASK ABOUT THIS//ASK ABOUT THIS
+/* ------------------CART UPDATE -----------------------------CART UPDATE--------------------------------------CART UPDATE-------------------------------------------CART UPDATE------------------- */
 //alows user to update the cart from the cart page so user does not need to go back and fourth when adding products to their cart
 app.post("/cart_update", function (request, response, next) {
    console.log(request.body);
    for (product_key in request.session.cart) {
        for (i in request.session.cart[product_key]) {
-           // this is to basically skip quantities that are 0
-           // because if there is a 0, it creates a blank field in the cart, and thats an error
+           // this is to skip quantities that are 0
+           // because if there is a number it will replace it with the number inputted in cart_update_${product_key}_${i}
            if (request.session.cart[product_key][i] == 0) {
                continue;
            }
            request.session.cart[product_key][i] = Number(request.body[`cart_update_${product_key}_${i}`]);
        }
    }
-   console.log(request.session);
+   console.log(request.session); //check to see if this works 
    response.redirect("./cart.html");
 })
 
+
+
+/* ------------------ CHECKOUT  --------------------------------------------- CHECKOUT --------------------------------- CHECKOUT ----------------------- CHECKOUT ----------------------------- */
 //cart checkout, mostely from example codes and meeting with prof port
 app.post("/cart_checkout", function (request, response) {
    var user_info= JSON.parse(request.cookies["user_info"]);
   // Generate HTML invoice string / this is just to keep the webpage consistant in all pages
-  // if user is not logged in you cant checkout
+  // if user is not logged in the checkout button will not show and you are unable to checkout
   if (user_info["name"] == 'undefined') {
    console.log(`username NOT found`);
    response.redirect('/cart.html?NotLoggedIn');
 } else {
 console.log(`found a username`);//test to see if it is working
 console.log(user_info["name"]);//test to see if it is working
-// not sure howuseful this is because I just send them to invoice.html and I send a msg saying email is sent
-    var invoice_str = ` 
-</div>Thank you for your order ${user_info["name"]}!<table border><th>Quantity</th><th>Item</th>`;
-    var shopping_cart = request.session.cart;
+
+//takes the last session cart and subtracts the quantity from each product from the quantity_availiable
+//updates quantity_availiable to last_cart which is the true inventory value after checking out 
+var last_cart = request.session.cart;
+    for (product_key in products_data) {
+        for ( i = 0; i < products_data[product_key].length; i++) {
+            // from here, if the brand is not a part of the cart, it'll just continue and update any that do
+            if (typeof last_cart[product_key] == 'undefined') continue;{
+                var last_qty = last_cart[product_key][i];
+                products_data[product_key][i]['quantity_available'] -= last_qty;
+            }
+        }
+    };
+//this is the invoice that will be sent through email
+var invoice_str = `<span style="display: flex; font-size: large; color: black; justify-content: center; text-align: center;">Thank you for your order ${request.session.full_name}!<br>Happy Holidays!</span><br><table border="2px">
+<thead>
+    <th>
+        Product
+    </th>
+    <th>
+        Quantity
+    </th>
+    <th>
+        Price
+    </th>
+    <th>
+        Extended Price
+    </th>
+</thead>`;
+var shopping_cart = request.session.cart;
+let subtotal = 0;
+// need to get total from qs
+// having trouble with getting shopping cart total from the cart itself
+let params = new URLSearchParams(request.query);
+
+if (params.has('total')) {
+    var total = params.get('total');
+}
+console.log(total);
+let total_quantity = total;
+
+for (product_key in products_data) {
+    for (i = 0; i < products_data[product_key].length; i++) {
+        if (typeof shopping_cart[product_key] == 'undefined') continue;
+        qty = shopping_cart[product_key][i];
+        if (qty > 0) {
+            extended_price = products_data[product_key][i]['price'] * qty;
+            subtotal = subtotal + extended_price;
+            invoice_str += `<tr>
+            <td>
+                ${products_data[product_key][i]['name']}
+            </td>
+            <td>
+            ${qty}
+            </td>
+            <td>
+                $${products_data[product_key][i]['price']}
+            </td>
+            <td>$${extended_price.toFixed(2)}</td>
+        </tr>`;
+        }
+    }
+}
+
+ //Tax @4.5%
+ var tax_rate = .045;
+ var sales_tax = tax_rate * subtotal;
+
+ //SHIPPING
+ var shipping;
+ if (subtotal > 500) {
+     shipping = 0;
+ } else if (subtotal >= 0 && subtotal < 150) {
+     shipping = 10;
+ } else {
+     shipping = 15;
+ }
+
+ //Calculate Grand total
+ var grand_total = subtotal + sales_tax + shipping;
+
+    invoice_str += `<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td class="text-right"><strong>Subtotal</strong><td>&nbsp;</td></td><td>&nbsp;</td><td><strong>$${subtotal.toFixed(2)}</strong></td></tr> 
     
-    for(product_key in products_data) {
-      for(i=0; i<products_data[product_key].length; i++) {
-          if(typeof shopping_cart[product_key] == 'undefined') continue;
-          qty = shopping_cart[product_key][i];
-          if(qty > 0) {
-            invoice_str += `<tr><td>${qty}</td><td>${products_data[product_key][i].item}</td><tr>  `;
-            console.log(qty)
-          }
-      }
-  }
-    invoice_str += '</table>';
+    <tr><td class="text-right"><strong>HI Sales Tax @ 4.5%</strong><td>&nbsp;</td></td><td>&nbsp;</td><td><strong>$${salestax.toFixed(2)}</strong></td></tr> 
+    <tr><td class="text-right"><strong>Shipping</strong><td>&nbsp;</td></td><td>&nbsp;</td><td><strong>$${shipping.toFixed(2)}</strong></td></tr>
+    <tr><td class="text-right"><strong>Grand Total</strong><td>&nbsp;</td></td><td>&nbsp;</td><td><strong>$${grand_total.toFixed(2)}</strong></td></tr>
+    
+    </table>`;
     
   // Set up mail server. Only will work on UH Network due to security restrictions
+  // got this code from assignment3 examples
     var transporter = nodemailer.createTransport({
       host: "mail.hawaii.edu",
       port: 25,
@@ -207,9 +290,9 @@ console.log(user_info["name"]);//test to see if it is working
   
     var user_email = user_info["email"];
     var mailOptions = {
-      from: 'phoney_store@bogus.com',
+      from: 'jdlp@hawaii.edu',
       to: user_email,
-      subject: 'Your phoney invoice',
+      subject: 'Water Of Life invoice',
       html: invoice_str
     };
     console.log(user_email);
@@ -223,7 +306,11 @@ console.log(user_info["name"]);//test to see if it is working
     });
 }
   });
-
+  /* ------------------EXIT INVOICE FORM------------------------------------EXIT INVOICE FORM-----------------------------------EXIT INVOICE FORM---------------------------------EXIT INVOICE FORM----------------- */
+//when user exits invoice the session will clear, 
+//the cart will reset, 
+//and you will be redirected to HOME page.
+//BUT you will still be signed in
   app.post("/exitinvoice", function (request, response) {
    console.log('got the exit');
    request.session.cart = {};
@@ -232,7 +319,7 @@ console.log(user_info["name"]);//test to see if it is working
 })
   
 
-/* ------------------LOGIN FORM------------- */
+/* ------------------LOGIN FORM---------------------LOGIN FORM-----------------------------LOGIN FORM-----------------------------LOGIN FORM---------------------------------LOGIN FORM--------------------------------- */
 app.post("/process_login", function (request, response) { 
    var errors = {};
    //login form info from post
@@ -241,20 +328,19 @@ app.post("/process_login", function (request, response) {
    var login_username = request.body['name']
    //check if username exists, then if entered password matches, lab 13 ex3-4
    if (typeof users[user_email] != 'undefined') {
-      //check if entered password matches the stored password
+      //check if entered password = the stored password
       if (users[user_email].password == the_password) {
-         //matches
+         //if matches then...
          qty_data_obj['email'] = user_email;
          qty_data_obj['fullname'] = users[user_email].name;
-          //Gets variable for cookie to display username on pages
+          //Gets variable for cookie to display username on pages and sets it into variable user_info
           var user_info = { "email": user_email, "name": qty_data_obj['fullname'], };
-          //Gives cookie a expiration time
+          //Gives cookie a expiration time and will hold user info for 30 minutes
           response.cookie('user_info', JSON.stringify(user_info), { maxAge: 30 * 60 * 1000 });
-         //direct to invoice page **need to keep data
+         //redirects to last page where user came from
          let params = new URLSearchParams(qty_data_obj);
          console.log(user_info);
   response.redirect(request.session.lastpage);
-
 
          return;
       } else {
@@ -271,55 +357,59 @@ app.post("/process_login", function (request, response) {
    response.redirect(`./login.html?`);
 });
 
-/* ------------------LOGOUT FORM------------- */
-app.get("/logout", function (request, response) { //Gets the get request to use logout function
-   var user_info = request.cookies["user_info"]; // makes user info javascript so it can be defined 
+/* ------------------LOGOUT FORM--------------------------LOGOUT FORM-----------------------------------LOGOUT FORM-----------------------------------LOGOUT FORM------------------------------------------- */
+app.get("/logout", function (request, response) { 
+   var user_info = request.cookies["user_info"]; //turns data from the cookie into a variable 
    console.log(JSON.stringify(user_info));
    if (user_info != undefined) {
-       var username = user_info["name"]; //checks to see whos logged in, needed to see if any user is logged in
-
+       var username = user_info["name"]; 
+       request.session.destroy(); // destroys the previous session
        logout_msg = `<script>alert('You have logged out! Log back in to continue shopping.'); location.href="./index.html";</script>`; //redirects to index, start of store
-       response.clearCookie('user_info'); //destroys cookie and user information
-       response.send(logout_msg); //if logged out, send message to user
+       response.clearCookie('user_info'); //destroys cookie user information when logout
+       response.send(logout_msg); //if logged out, send message to user from 2 lines above
        request.session.destroy(); // when loggoed out, destroy the session
        
-//if no user is logged in, then display error message & redirect to home page
+//if no user is logged in, 
+//display error message 
+//& redirect to home page
    } else { 
-       console.log("in here");
        logouterror_msg = `<script>alert("You are not logged in."); location.href="./index.html";</script>`;
        response.send(logouterror_msg);
 
    }
 });
 
-/*----------------REGISTRATION PAGE--------------*/
-//regex from assignment 2 resources
+/*----------------REGISTRATION PAGE---------------------------REGISTRATION PAGE----------------------------REGISTRATION PAGE------------------------------------------REGISTRATION PAGE------------------------*/
+//process all registration requests
+//if there are 0 errors then redirect to
 app.post("/register", function (request, response) {
+   //starts with 0 errors
    var registration_errors = {};
-   //check email
+   //gets email input and turns to variable
    var reg_email = request.body['email'].toLowerCase();
 
    //check email fomaatting 'xxx@yyy.com'
    if (/^[a-zA-Z0-9._]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,3}$/.test(request.body.email) == false) {
       registration_errors['email'] = `Please enter a valid email`;
-      //console.log(registration_errors['email']);
+      //if there is no input for email send error
    } else if (reg_email.length == 0) {
       registration_errors['email'] = `Enter an email`;
    }
 
-   //unique email?
+   //if email is already registered send error
    if (typeof users[reg_email] != 'undefined') {
       registration_errors['email'] = `This email has already been registered`;
    }
 
-   //password greater than 8 characters?
+   //if password is greater than 8 characters then continue
    if (request.body.password.length < 8) {
       registration_errors['password'] = `Minimum 8 characters`;
-   } else if (request.body.password.length == 0) { //nothing entered
+      //if there is no input for password send error
+   } else if (request.body.password.length == 0) { 
       registration_errors['password'] = `Enter a password`;
    }
 
-   //check repeated password for matches
+   //if password matches then continue, if not send error
    if (request.body['password'] != request.body['repeat_password']) {
       registration_errors['repeat_password'] = `The passwords do not match`;
    }
@@ -336,7 +426,7 @@ app.post("/register", function (request, response) {
    }
 
    //assignment 2 code examples
-   //save new registration data to user_data.json
+   //save new registration data to user_data.json in a string
    if (Object.keys(registration_errors).length == 0) {
       console.log('no registration errors')//store user data in json file
       users[reg_email] = {};
@@ -348,15 +438,15 @@ app.post("/register", function (request, response) {
       qty_data_obj['email'] = reg_email;
       qty_data_obj['fullname'] = users[reg_email]['fullname'];
       let params = new URLSearchParams(qty_data_obj);
-      response.redirect('./display_products.html?products_key=Whiskey'); //all good! => to whiskey page
-   } else {
+      response.redirect(request.session.lastpage); //all good! => to last page
+   } else {// if there is an error send them back to registration page with errors
       request.body['registration_errors'] = JSON.stringify(registration_errors);
       let params = new URLSearchParams(request.body);
       response.redirect("./registration.html?" + params.toString());
    }
 });
 
-/* -------------Changing user's data -----------------*/
+/* -------------Changing user's data --------------------------Changing user's data-----------------Changing user's data------------------------------------Changing user's data----------------------------------------------*/
 //FIXED ASSIGNMENT 2 ERROR (SEE BELOW)
 // fixed any issues and updated to meet my website requirements
 app.post("/newpw", function (request, response) { 
@@ -370,25 +460,24 @@ app.post("/newpw", function (request, response) {
    } else if (login_email.length == 0) {
       reseterrors['email'] = 'Please enter an email';
    }
-   //check repeated password for matches
-
+   //check repeated password for matches fixed from assignment2 submission 
+   //PASSWORD VALIDATIONS
    if (request.body['newpassword'] != request.body['repeatnewpassword']) {
       reseterrors['repeatnewpassword'] = `The new passwords do not match`;
    }
-
    if (typeof users[login_email] != 'undefined') {
       if (users[login_email].password == login_password) {
-         //validate password > 8 characters
+         //password must have minimum 8 characters
          if (request.body.newpassword.length < 8) {
             reseterrors['newpassword'] = 'Password must have a minimum of 8 characters.';
-         }//validate password is correct
+         }//password must = registered password
          if (users[login_email].password != login_password) {
             reseterrors['password'] = 'Incorrect password';
          }
-         //validate both passwords entered are correct
+         //new password must = repeated newpassword
          if (request.body.newpassword != request.body.repeatnewpassword) {
             reseterrors['repeatnewpassword'] = 'Both passwords must match';
-         }//validate new password =/= old password
+         }//password must not = old password
          // fixed ERROR from Ass2 where user woudl get the wrong ERROR code "New password cannot be the same as the old password"
          if (request.body.newpassword == login_password) {
             reseterrors['newpassword'] = `New password cannot be the same as the old password`;
@@ -399,7 +488,6 @@ app.post("/newpw", function (request, response) {
    } else { //email error output
       reseterrors['email'] = `Email has not been registered`;
    }
-
  //fixed any issues
    if (Object.keys(reseterrors).length == 0) {
       //Write data and send to invoice.html
