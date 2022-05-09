@@ -24,7 +24,10 @@ invoice page, this is to format and design the style of the invoice
     });
     if(getCookie("user_info") != "" ){
             var user_info= JSON.parse(getCookie("user_info"))
+        }else{
+            location.href="./login.html";
         }
+        
 
 </script>
 <!DOCTYPE html>

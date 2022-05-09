@@ -158,16 +158,9 @@ app.post("/get_cart", function (request, response) {
 //alows user to update the cart from the cart page so user does not need to go back and fourth when adding products to their cart
 app.post("/cart_update", function (request, response, next) {
    console.log(request.body);
-   for (product_key in request.session.cart) {
-       for (i in request.session.cart[product_key]) {
-           // this is to skip quantities that are 0
-           // because if there is a number it will replace it with the number inputted in cart_update_${product_key}_${i}
-           if (request.session.cart[product_key][i] == 0) {
-               continue;
-           }
-           request.session.cart[product_key][i] = Number(request.body[`cart_update_${product_key}_${i}`]);
-       }
-   }
+  
+           request.session.cart = request.body.cart_update;
+       
    console.log(request.session); //check to see if this works 
    response.redirect("./cart.html");
 })
@@ -270,7 +263,7 @@ for (product_key in products_data) {
     invoice_str += `<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
     <tr><td class="text-right"><strong>Subtotal</strong><td>&nbsp;</td></td><td>&nbsp;</td><td><strong>$${subtotal.toFixed(2)}</strong></td></tr> 
     
-    <tr><td class="text-right"><strong>HI Sales Tax @ 4.5%</strong><td>&nbsp;</td></td><td>&nbsp;</td><td><strong>$${salestax.toFixed(2)}</strong></td></tr> 
+    <tr><td class="text-right"><strong>HI Sales Tax @ 4.5%</strong><td>&nbsp;</td></td><td>&nbsp;</td><td><strong>$${sales_tax.toFixed(2)}</strong></td></tr> 
     <tr><td class="text-right"><strong>Shipping</strong><td>&nbsp;</td></td><td>&nbsp;</td><td><strong>$${shipping.toFixed(2)}</strong></td></tr>
     <tr><td class="text-right"><strong>Grand Total</strong><td>&nbsp;</td></td><td>&nbsp;</td><td><strong>$${grand_total.toFixed(2)}</strong></td></tr>
     

@@ -38,7 +38,7 @@ function isNonNegInt(q, return_errors = false) {
         document.getElementById(theTextbox.name + '_label').innerHTML = errs.join(", ");
     }
 
-      // get the query string
+      // get products key from the query string
       let params = (new URL(document.location)).searchParams;
         if (params.has('products_key')) {
             var this_product_key = params.get('products_key');
@@ -52,19 +52,29 @@ function isNonNegInt(q, return_errors = false) {
             products_data = JSON.parse(response);
         });
         var cart;
-        var total = 0;
-        
+        var total = 0; //sets total to 0
+        //loads in the cart info
         loadJSON('get_cart', function (response) {
             cart_info = JSON.parse(response);
             for (product_key in cart_info) {
                 total += cart_info[product_key].reduce((a, b) => a*1 + b*1);
             }
         });
-
+        // gets user info from function.js
         if(getCookie("user_info") != "" ){
             var user_info= JSON.parse(getCookie("user_info"))
         }
-
+// sets the searched prooduct to be highlighted extra credit?
+        window.onload = () => {
+            if (params.has('product_index')) {
+                var selected_index = params.get('product_index');
+                var selected_section = document.getElementById(`product_section_${selected_index}`);
+                selected_section.style.backgroundColor = "rgba(211,211,211)"; // color set to light grey
+                selected_section.focus(); //brings the users focus to item searched
+                selected_section.scrollIntoView(); //brings the users focus to item searched
+                }
+            
+        }
     </script>
 </head>
 <body>
@@ -88,6 +98,7 @@ function isNonNegInt(q, return_errors = false) {
     <script>
 
         // This is to print out whether the user can log in or not
+        //if user is not signed in then display log in in navbar if they are logged in display a personalized greeting for user
         if (typeof user_info == 'undefined'){
             document.write(`
             <a class="active" href="./login.html?products_key=Whiskey" style='color: darkgreen;'> Login Here</a>`)
@@ -135,7 +146,7 @@ function isNonNegInt(q, return_errors = false) {
             for (i = 0; i < products.length; i++) {
                 
                 document.write(`
-            <section class="item">
+            <section id="product_section_${i}" class="item">
             <p>${products[i].item}</p>
             <img src="${products[i].image}" height="200px">
             <p>$${products[i].price}</p>

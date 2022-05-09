@@ -125,7 +125,7 @@ function isNonNegInt(q, return_errors = false) {
                 
                 for(let p_key in products_data){
                     let products = products_data[p_key];
-                    console.log(products)
+                    
                 
              for(i in products) {
         
@@ -134,7 +134,7 @@ function isNonNegInt(q, return_errors = false) {
       
         <section class="item" style="display:none">
         <h2>${products[i].item}</h2>
-        <a href="display_products.html?products_key=${p_key}">
+        <a href="display_products.html?products_key=${p_key}&product_index=${i}">
         <img src="${products[i].image}" height="200px"></a>
         <p>$${products[i].price}</p>
         <p> Quantity: ${products[i].quantity_available}</p>

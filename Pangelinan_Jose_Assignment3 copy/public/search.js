@@ -51,14 +51,14 @@ function getCookie(cname) {
    
 
     for (var i = 0; i < pname.length; i++) {
+      products1[i].style.display = "none";
       let match = products1[i].getElementsByTagName("h2")[0];
-      if (match) {
+      console.log(match.length, searchbox)
+      if (match && searchbox != "") {
         let textvalue = match.textContent || match.innerHTML
         if (textvalue.toLowerCase().indexOf(searchbox) > -1) {
           products1[i].style.display = "";
-          console.log(products1[i].style.display)
-        }else{
-          products1[i].style.display = "none";
+          
         }
        
       }

@@ -1,43 +1,44 @@
-
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
-        <link rel="stylesheet" href="style.css">
-        <script src="./functions.js"></script>
-        <script src="/session_data.js"></script>
-        <script>
-            let params = (new URL(document.location)).searchParams;
-            if (params.has('products_key')) {
-                var this_product_key = params.get('products_key');
-            } else {
-                document.stop;
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+    <link rel="stylesheet" href="style.css">
+    <script src="./functions.js"></script>
+    <script src="/session_data.js"></script>
+    <script>
+        let params = (new URL(document.location)).searchParams;
+        if (params.has('products_key')) {
+            var this_product_key = params.get('products_key');
+        } else {
+            document.stop;
+        }
+        var products_data;
+        var total = 0;
+        loadJSON('get_products_data', function (response) {
+            // Parsing JSON string into object
+            products_data = JSON.parse(response);
+        });
+        loadJSON('get_cart', function (response) {
+            cart_info = JSON.parse(response);
+            for (product_key in cart_info) {
+                total += cart_info[product_key].reduce((a, b) => a * 1 + b * 1);
             }
-            var products_data;
-            var total = 0;
-            loadJSON('get_products_data', function(response) {
-                // Parsing JSON string into object
-                products_data = JSON.parse(response);
-            });
-            loadJSON('get_cart', function (response) {
-                cart_info = JSON.parse(response);
-                for (product_key in cart_info) {
-                    total += cart_info[product_key].reduce((a, b) => a*1 + b*1);
-                }
-            });
-    
-            if(getCookie("user_info") != "" ){
-                var user_info= JSON.parse(getCookie("user_info"))
-            }
-        </script>
-    </head>
-    <body>
-    
-           <!-- Navigation bar -->
-     <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:75px">
+        });
+
+        if (getCookie("user_info") != "") {
+            var user_info = JSON.parse(getCookie("user_info"))
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- Navigation bar -->
+    <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:75px">
         <center>
             <a href='index.html' style='color: darkgreen;'>Home</a>&nbsp&nbsp&nbsp;
             <script>
@@ -50,43 +51,43 @@
             <script>
                 cart_total.innerHTML = total;
             </script>
-        
-        <script>
-    
-            // This is to print out whether the user can log in or not
-            if (typeof user_info == 'undefined'){
-                document.write(`
+
+            <script>
+
+                // This is to print out whether the user can log in or not
+                if (typeof user_info == 'undefined') {
+                    document.write(`
                 <a class="active" href="./login.html?products_key=Whiskey" style='color: darkgreen;'> Login Here</a>`)
-            } else {
-                document.write(`
+                } else {
+                    document.write(`
                 <a class="active" href="/logout" style='color: darkgreen;'>Hey ${user_info.name}, Logout?</a>`)
-            }
-        
-        
-        </script>
-        <br>
-        <a href= 'search.html'style='color: darkgreen;', style="margin-right: 2px;" >
-        <img src="whiskeyphotos/SEARCH.png" width="1%" height="1%"</img> Search</img></a>
-    <div class="homepageLogo">
-        <a href="./index.html">
-            <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
-        </a>
-    </div>
-    <br>
-    </body>
-        
-        <script>cart_total.innerHTML = total;</script>
-        <br></div>
-    
-    <center>
-        <table border="2" class="center">
-            <tbody>
-                <script>
-                    
-                     if (total == 0){
-            
-        } else {
-            document.write(`FREE SHIPPING FOR ORDERS OVER $500 
+                }
+
+
+            </script>
+            <br>
+            <a href='search.html' style='color: darkgreen;' , style="margin-right: 2px;">
+                <img src="whiskeyphotos/SEARCH.png" width="1%" height="1%" </img> Search</img></a>
+            <div class="homepageLogo">
+                <a href="./index.html">
+                    <img src="whiskeyphotos/whiskeyheader.jpg" width="100%"></img>
+                </a>
+            </div>
+            <br>
+</body>
+
+<script>cart_total.innerHTML = total;</script>
+<br></div>
+
+<center>
+    <table border="2" class="center">
+        <tbody>
+            <script>
+
+                if (total == 0) {
+
+                } else {
+                    document.write(`FREE SHIPPING FOR ORDERS OVER $500 
             <form action="./cart_update" method="post">
                 
                                         <table border="2px">
@@ -104,66 +105,67 @@
                                                     Extended Price
                                                 </th>
                                             </thead>`);
-        };
-                    subtotal = 0; //start subtotal with 0
-                    for(let p_key in cart_info){
-    
-                    var products = products_data[p_key];
-                    var quantities= cart_info[p_key];
-    
-                    //generate item rows for table
-                    for (i = 0; i < products.length; i++) {
-                        if (quantities[i] > 0) {
+                };
+                subtotal = 0; //start subtotal with 0
+                // check if cart is empty let them know
+                if (cart_info == {}) {
+                    document.write(`<tr>There are no items in your cart.Click <a href="./index.html">here</a> to start shopping!.</tr>`);
+                    console.log("no items");
+                } else {
+                    for (let p_key in cart_info) {
+
+                        var products = products_data[p_key];
+                        var quantities = cart_info[p_key];
+
+                        //generate item rows for table
+                        for (let i in quantities) {
+                            if (quantities[i] <= 0) {
+                                document.write(`<input type="hidden" value="0" name="cart_update[${p_key}][${i}]" ></input>`);
+                                continue;
+
+                            }
                             //calculate extended price
                             extended_price = quantities[i] * products[i].price;
                             subtotal += extended_price;
-                            //generate the product rows for table
-    
-                            if (total == 0 ) {
-                                document.write( `<tr>There are no items in your cart.Click <a href="./index.html">here</a> to start shopping!.</tr>`);
-                                console.log("no items");
-                        
-            } else {
-                 console.log("GOOD");
-                                document.write(`
+                            //generate the product rows for table with products
+                            console.log("GOOD");
+                            document.write(`
                             <tr>
                             <td width="43%">${products[i].item}</td>
-                            <td align="center" width="11%"><input type="number" value="${quantities[i]}" name="cart_update_${product_key}_${i}"min="0" max="${products_data[product_key][i]['quantity_available']}" id="quantity_input" ></input></td>
+                            <td align="center" width="11%"><input type="number" value="${quantities[i]}" name="cart_update[${p_key}][${i}]" min="0" max="${products_data[p_key][i]['quantity_available']}" ></input></td>
                             <td width="13%">\$${products[i].price}</td>
                             <td width="54%">\$${extended_price.toFixed(2)}</td>
                             </tr>
                             `);
-    
-                            }
-                          
+
                         }
+
                     }
                 }
-                    //Tax @4%
-                    var tax_rate = .045;
-                    var sales_tax = tax_rate * subtotal;
-    
-                    //SHIPPING
-                    var shipping;
-                    if (subtotal > 500) {
-                        shipping = 0;
-                    } else if (subtotal >= 0 && subtotal < 150) {
-                        shipping = 10;
-                    } else {
-                        shipping = 15;
-                    }
-                    
-                    
 
-                    //Calculate Ggrand total
-                    var grand_total = subtotal + sales_tax + shipping;
+                //Tax @4.5%
+                var tax_rate = .045;
+                var sales_tax = tax_rate * subtotal;
 
-                    if (total == 0 ) {
-                                document.write( `<tr>There are no items in your cart. Click <a href="./index.html" style="color:blue">HERE</a> to start shopping!.</tr>`);
-                                console.log("no items");
-                        
-            } else {
-                letgoodmsg =`
+                //SHIPPING if total > 500 free shipping
+                var shipping;
+                if (subtotal > 500) {
+                    shipping = 0;
+                } else if (subtotal >= 0 && subtotal < 150) {
+                    shipping = 10;
+                } else {
+                    shipping = 15;
+                }
+
+                //Calculate Grand total
+                var grand_total = subtotal + sales_tax + shipping;
+
+                if (total == 0) {
+                    document.write(`<tr>There are no items in your cart. Click <a href="./index.html" style="color:blue">HERE</a> to start shopping!.</tr>`);
+                    console.log("no items");
+
+                } else {
+                    letgoodmsg = `
                 <tr>
                     <td colspan="4" width="100%">&nbsp;</td>
                 </tr>
@@ -202,21 +204,18 @@
             </tbody>
         </table>
             `;
-        document.write(letgoodmsg);
-        document.write(`<input type="submit" class="submit" name="update_cart_button" value="Update Cart">
+                    document.write(letgoodmsg);
+                    document.write(`<input type="submit" class="submit" name="update_cart_button" value="Update Cart">
         </form>`)
-        if(user_info == undefined){
-        document.write(`<h3><font color="red">Hey, you must be logged in first before checking out!</font></h3>`)
-    } else {
-        document.write(`<form action="./cart_checkout?total=${total}" method="post">
+                    if (user_info == undefined) {
+                        document.write(`<h3><font color="red">Hey, you must be logged in first before checking out!</font></h3>`)
+                    } else {
+                        document.write(`<form action="./cart_checkout?total=${total}" method="post">
             <input type="submit" class="submit1" id="checkout_button" value="Checkout"`);
-            
-        }
-        }
-       
 
-                </script>
-                <br>
-               
-               
-        
+                    }
+                }
+
+
+            </script>
+            <br>
