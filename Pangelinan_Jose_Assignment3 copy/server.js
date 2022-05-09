@@ -4,12 +4,11 @@
 
 
 //Jose Pangelinan
-//Assignment 2
+//Assignment 3
 //This is the server for store app
-
+//CODE COPIED FROM ASSIGNMENT 2  |  MINOR CHANGES TO FIX ANY PAST ERRORS AND NEW IMPLEMENTATIONS 
 //modified from info_server_Ex5.js in Lab13 code
 //modified from info_server_EC.js in Lab13 code
-//modified from Tiffany Young | chloekamm
 
 /*load product data*/
 var products = require(__dirname + '/products.json');
@@ -24,6 +23,9 @@ var app = express();
 var products_data = require(__dirname + '/products.json');
 
 //E3.js LAB 15 COOKIE and sessions
+//this will give the users cookies and defined the sessions
+// this will encrypt the cookies so that no one can pose and a different user
+// all encrypted data is unique
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -59,19 +61,20 @@ function isNonNegInt(q, returnErrors = false) {
 
    return returnErrors ? errors : (errors.length == 0);
 }
-
+//UPDATED
 app.all('*', function (request, response, next) {
    console.log(`Got a ${request.method} to path ${request.path}`);
    // need to initialize an object to store the cart in the session. We do it when there is any request so that we don't have to check it exists
    // anytime it's used
-   if(typeof request.session.cart == 'undefined') { 
+   if(typeof request.session.cart == 'undefined') {  //this will give the user a cart if there is none
       request.session.cart = {};
     } 
-      var backURL=request.header('referer') || "/";
+    //code from office sessions with PROF PORT
+      var backURL=request.header('referer') || "/"; // sets backURL to previouos page if page does not include "login", "update_info", "newpw", "regist"
       if (backURL.includes("login") == false && backURL.includes("regist") == false && backURL.includes("newpw") == false && backURL.includes("update_info") == false) {
          request.session.lastpage = backURL;
       }
-      console.log(request.session.lastpage,backURL );
+      console.log(request.session.lastpage,backURL ); // check to see if working ITS GOOD
 
    next();
 });
@@ -89,10 +92,8 @@ app.post("/add_to_cart", function(request, response) {
     // turn request body into usable variables
     var product_key = request.body['products_key'];
     var quantity_submit = request.body['quantity'];
-
-    // assume 0 errors
+    // set errors to 0
     var errors = {};
-
     // now to validate the submitted quantities
     // This checks for whether it passes the isNonNegInt or if we have quantities available or not
     for (i in products_data[product_key]) {
@@ -107,15 +108,15 @@ app.post("/add_to_cart", function(request, response) {
     }
     if (Object.keys(errors).length === 0) {
       if (typeof request.session.cart == 'undefined') {
-          // establishes a cart if there isn't one in the session
+          //gives user a cart
           request.session.cart = {};
       }
       if (typeof request.session.cart[product_key] == 'undefined') {
-          // this creates an array in the cart based on the product_key and fills the entirety of it with 0
+          // sets the array values to 0 for all products
           request.session.cart[product_key] = new Array(quantity_submit.length).fill(0);
       }
       for (i in request.session.cart[product_key]) {
-          // this adds the submitted quantities to the array based on the product key
+          //this gives the array the values of each data 0,0,0,0,0, -> 0,1,1,0,0 like this
           request.session.cart[product_key][i] += Number(quantity_submit[i]);
       }
   } else {
@@ -129,25 +130,26 @@ app.post("/add_to_cart", function(request, response) {
 });
 
 
-// This will be used when ever a site needs to get info from the session like the cart or usrname
+// This will be used when ever a site needs to get info from the session like the cart or username
 app.get("/session_data.js", function (request, response, next) {
    response.type('.js');
    // declare a shopping cart if there isn't one
    if (typeof request.session.cart == 'undefined') {
        request.session.cart = {};
    }
-   // now to declare the username, email, name 
-   // Gonna keep all the data into one long Javascript string with the data as variables
+   // now to declare the username, email, cart
+   // keeps the data in 1 variable under sessions string
    var session_str = `var user_name = ${JSON.stringify(request.session.name)}; var user_email = ${JSON.stringify(request.session.email)}; var cart_data = ${JSON.stringify(request.session.cart)};`;
-   // send the client the session string
+   // send the client the session string just created
    response.send(session_str);
 })
-
+//get cart from workshop and code examples
 app.post("/get_cart", function (request, response) {
    response.json(request.session.cart);
 
 });
-
+//ADDED CART UPDATE
+//alows user to update the cart from the cart page so user does not need to go back and fourth when adding products to their cart
 app.post("/cart_update", function (request, response, next) {
    console.log(request.body);
    for (product_key in request.session.cart) {
@@ -161,20 +163,21 @@ app.post("/cart_update", function (request, response, next) {
        }
    }
    console.log(request.session);
-
    response.redirect("./cart.html");
-});
+})
 
+//cart checkout, mostely from example codes and meeting with prof port
 app.post("/cart_checkout", function (request, response) {
    var user_info= JSON.parse(request.cookies["user_info"]);
   // Generate HTML invoice string / this is just to keep the webpage consistant in all pages
+  // if user is not logged in you cant checkout
   if (user_info["name"] == 'undefined') {
    console.log(`username NOT found`);
    response.redirect('/cart.html?NotLoggedIn');
 } else {
-console.log(`found a username`);
-//test to see if it is working
-console.log(user_info["name"]);
+console.log(`found a username`);//test to see if it is working
+console.log(user_info["name"]);//test to see if it is working
+// not sure howuseful this is because I just send them to invoice.html and I send a msg saying email is sent
     var invoice_str = ` 
 </div>Thank you for your order ${user_info["name"]}!<table border><th>Quantity</th><th>Item</th>`;
     var shopping_cart = request.session.cart;
@@ -185,6 +188,7 @@ console.log(user_info["name"]);
           qty = shopping_cart[product_key][i];
           if(qty > 0) {
             invoice_str += `<tr><td>${qty}</td><td>${products_data[product_key][i].item}</td><tr>  `;
+            console.log(qty)
           }
       }
   }
@@ -229,7 +233,7 @@ console.log(user_info["name"]);
   
 
 /* ------------------LOGIN FORM------------- */
-app.post("/process_login", function (request, response) { //modified from Tiffany Young
+app.post("/process_login", function (request, response) { 
    var errors = {};
    //login form info from post
    var user_email = request.body['email'].toLowerCase();
@@ -277,10 +281,10 @@ app.get("/logout", function (request, response) { //Gets the get request to use 
        logout_msg = `<script>alert('You have logged out! Log back in to continue shopping.'); location.href="./index.html";</script>`; //redirects to index, start of store
        response.clearCookie('user_info'); //destroys cookie and user information
        response.send(logout_msg); //if logged out, send message to user
-       request.session.destroy();
+       request.session.destroy(); // when loggoed out, destroy the session
        
-
-   } else { //if no user is logged in, then display error message & redirect to index (store entry)
+//if no user is logged in, then display error message & redirect to home page
+   } else { 
        console.log("in here");
        logouterror_msg = `<script>alert("You are not logged in."); location.href="./index.html";</script>`;
        response.send(logouterror_msg);
@@ -290,7 +294,7 @@ app.get("/logout", function (request, response) { //Gets the get request to use 
 
 /*----------------REGISTRATION PAGE--------------*/
 //regex from assignment 2 resources
-app.post("/register", function (request, response) { //modified from Tiffany Young
+app.post("/register", function (request, response) {
    var registration_errors = {};
    //check email
    var reg_email = request.body['email'].toLowerCase();
@@ -353,7 +357,9 @@ app.post("/register", function (request, response) { //modified from Tiffany You
 });
 
 /* -------------Changing user's data -----------------*/
-app.post("/newpw", function (request, response) { //modified from Tiffany Young
+//FIXED ASSIGNMENT 2 ERROR (SEE BELOW)
+// fixed any issues and updated to meet my website requirements
+app.post("/newpw", function (request, response) { 
    var reseterrors = {};
 
    let login_email = request.body['email'].toLowerCase();
@@ -365,6 +371,7 @@ app.post("/newpw", function (request, response) { //modified from Tiffany Young
       reseterrors['email'] = 'Please enter an email';
    }
    //check repeated password for matches
+
    if (request.body['newpassword'] != request.body['repeatnewpassword']) {
       reseterrors['repeatnewpassword'] = `The new passwords do not match`;
    }
@@ -382,7 +389,8 @@ app.post("/newpw", function (request, response) { //modified from Tiffany Young
          if (request.body.newpassword != request.body.repeatnewpassword) {
             reseterrors['repeatnewpassword'] = 'Both passwords must match';
          }//validate new password =/= old password
-         if (request.body.newpassword || request.body.repeatnewpassword == login_password) {
+         // fixed ERROR from Ass2 where user woudl get the wrong ERROR code "New password cannot be the same as the old password"
+         if (request.body.newpassword == login_password) {
             reseterrors['newpassword'] = `New password cannot be the same as the old password`;
          }
       } else { //password error output
@@ -392,10 +400,13 @@ app.post("/newpw", function (request, response) { //modified from Tiffany Young
       reseterrors['email'] = `Email has not been registered`;
    }
 
+ //fixed any issues
    if (Object.keys(reseterrors).length == 0) {
       //Write data and send to invoice.html
+      //updated code to add name into the string
       users[login_email] = {};
       users[login_email].password = request.body.newpassword
+      users[login_email].name = qty_data_obj['fullname']
 
       //Writes user information into file
       fs.writeFileSync(filename, JSON.stringify(users), "utf-8");
@@ -404,7 +415,7 @@ app.post("/newpw", function (request, response) { //modified from Tiffany Young
       qty_data_obj['email'] = login_email;
       qty_data_obj['fullname'] = users[login_email]['fullname'];
       let params = new URLSearchParams(qty_data_obj);
-      response.redirect('./invoice.html?' + params.toString()); //all good! => to invoice w/data
+      response.redirect(request.session.lastpage); //all good! => to last page
       return;
    } else {
       //If there are errors, send back to page with errors
@@ -420,53 +431,6 @@ app.get("/products.js", function (request, response, next) {
    var products_str = `var products = ${JSON.stringify(products)};`;
    response.send(products_str);
 });
-
-// monitor all requests
-app.all('*', function (request, response, next) {
-   console.log(request.method + ' to ' + request.path);
-   next();
-});
-
-/* -------------------- PURCHASE PROCESS-----------------*/
-// process purchase request (validate quantities, check quantity available)
-app.post('/process_form', function (request, response, next) { //modified from Tiffany Young
-   var quantities = request.body['quantity'];
-   //assume no errors or no quantity
-   var errors = {};
-   var check_quantities = false;
-   //check for NonNegInt
-   for (i in quantities) {
-      if (isNonNegInt(quantities[i]) == false) { //check i quantity
-         errors['quantity_' + i] = `Please choose a valid quantity for ${products[i].item}.`;
-      }
-      if (quantities[i] > 0) { //validate if any quantity is selected
-         check_quantities = true;
-      }
-      if (quantities[i] > products[i].quantity_available) { //validate quantity is available
-         errors['quantity_available' + i] = `We don't have ${(quantities[i])} ${products[i].item} available.`;
-      }
-   }
-   if (!check_quantities) { //validate quantity selected
-      errors['no_quantities'] = `Please select a quantity`;
-   }
-
-   let qty_obj = { "quantity": JSON.stringify(quantities) };
-   if (Object.keys(errors).length == 0) {
-      // remove quantities purchased from inventory quantities
-      for (i in products) {
-         products[i].quantity_available -= Number(quantities[i]);
-      }
-      //save quantity data for invoice
-      qty_data_obj = qty_obj;
-      response.redirect('./login.html');
-   }
-   else { //if i have errors, take the errors and go back to shop.html
-      let errs_obj = { "errors": JSON.stringify(errors) };
-      console.log(qs.stringify(qty_obj));
-      response.redirect('./display_products.html?' + qs.stringify(qty_obj) + '&' + qs.stringify(errs_obj));
-   }
-});
-
 
 
 // route all other GET requests to files in public 

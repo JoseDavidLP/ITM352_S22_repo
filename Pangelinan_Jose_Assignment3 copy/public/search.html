@@ -17,7 +17,7 @@ Shop page, this is the format and design for the shop page
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
     <title>Water Of Life</title>
-    <script src="./functions.js"></script>
+    <script src="./search.js"></script>
     <script src="/session_data.js"></script>
     <script>
 
@@ -43,7 +43,7 @@ function isNonNegInt(q, return_errors = false) {
         if (params.has('products_key')) {
             var this_product_key = params.get('products_key');
         } else {
-            document.write('no products key in query string');
+            console.log('no products key in query string');
             document.stop;
         }
         var products_data;
@@ -113,13 +113,13 @@ function isNonNegInt(q, return_errors = false) {
 
     <!-- Text content -->
     <p style="text-align: center;">To make your online order, enter the quantity you would like underneath each product. Click the Place Order button at the bottom of the page to submit your order and receive a receipt.</p><br>
-
+    <!-- search textbox -->
      search:<input type="text" id="search_textbox" onkeyup="search()" placeholder="Search Products"><br>
     
     
- <!-- Displays products and POST to ./process_form -->
+ <!-- Displays products and POST to ./add to cart -->
  <div class="products" id="products">
-    <form name="quantity_form" action="./process_form" method="POST">
+    <form name="quantity_form">
         <main class="products">
             <script>
                 
@@ -134,7 +134,8 @@ function isNonNegInt(q, return_errors = false) {
       
         <section class="item" style="display:none">
         <h2>${products[i].item}</h2>
-        <img src="${products[i].image}" height="200px">
+        <a href="display_products.html?products_key=${p_key}">
+        <img src="${products[i].image}" height="200px"></a>
         <p>$${products[i].price}</p>
         <p> Quantity: ${products[i].quantity_available}</p>
         <p>${products[i].description}</p>
@@ -147,8 +148,6 @@ function isNonNegInt(q, return_errors = false) {
             </script>
         </main>
 
-
-<INPUT TYPE="SUBMIT" name="Submit" value="Add to Cart" style="margin-top: 15px;" class="w3-center w3-padding-16">
 </FORM>
     </div>
 </body>

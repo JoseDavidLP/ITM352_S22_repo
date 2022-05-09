@@ -43,7 +43,7 @@ invoice page, this is to format and design the style of the invoice
     <br>
     </body>
         
-        <script>cart_total.innerHTML = total;</script>
+        
         <br></div>
      <!-- Website Logo -->
      <div class="homepageLogo">
@@ -54,12 +54,13 @@ invoice page, this is to format and design the style of the invoice
 <!-- Website Tagline -->
 <div class="tagline">
     <i>Taste the Water of Life</i>
-    <script>
-    document.write(`<p>Thank you for shopping with us! your invoice has bent sent to ${user_info.email}!</p>`);
-</script>
 </div>
+<center>
+    <script>
 
-    
+    document.write(`<p>Thank you for shopping with us! your invoice has bent sent to ${user_info.email}!</p>`);
+
+</script>
         <table border="2" class="center">
             <tbody>
                 <tr>
@@ -155,18 +156,23 @@ invoice page, this is to format and design the style of the invoice
             </tbody>
         </table>
         </div>
-            </script>
+    </script>
+            
+            
         </div>
         </div>
-
     
+       
     <a>
         <form action="./exitinvoice" method="post">
         <input type="submit" class="button" style="float: right;" value="Continue Shopping">
                 </form>
     </a>
+
 </body>
+
 <footer>
     Copywrite 2022 WaterOfLife international Corporation
 </footer>
+
 </html>

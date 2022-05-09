@@ -38,4 +38,28 @@ function getCookie(cname) {
     }
     return "";
   }
-  
+  // Idea from meeting with professor port
+  //search function IR3
+  // you can search for items through their names (not description)
+// code from https://www.youtube.com/watch?v=ZFUOC-y4i0s
+  const search = () =>{
+    const searchbox = document.getElementById("search_textbox").value.toLowerCase();
+    const storeitems = document.getElementById("products");
+    const products1 = document.querySelectorAll(".item")
+    const pname = document.getElementsByTagName("h2")
+    
+    for (var i = 0; i < pname.length; i++) {
+      let match = products1[i].getElementsByTagName("h2")[0];
+      
+      if (match) {
+        let textvalue = match.textContent || match.innerHTML
+        if (textvalue.toLowerCase().indexOf(searchbox) > -1) {
+          products1[i].style.display = "inline";
+          console.log(textvalue)
+        }else{
+          products1[i].style.display = "none";
+        }
+        
+      }
+    }
+}
