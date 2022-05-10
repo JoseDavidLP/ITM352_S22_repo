@@ -194,7 +194,7 @@ var last_cart = request.session.cart;
         }
     };
 //this is the invoice that will be sent through email
-var invoice_str = `<span style="display: flex; font-size: large; color: black; justify-content: center; text-align: center;">Thank you for your order ${request.session.full_name}!<br>Happy Holidays!</span><br><table border="2px">
+var invoice_str = `<span style="display: flex; font-size: large; color: black; justify-content: center; text-align: center;">Thank you for your order ${request.session.name}!</span><br><table border="2px">
 <thead>
     <th>
         Product
