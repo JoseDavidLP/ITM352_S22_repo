@@ -194,7 +194,7 @@ var last_cart = request.session.cart;
         }
     };
 //this is the invoice that will be sent through email
-var invoice_str = `<span style="display: flex; font-size: large; color: black; justify-content: center; text-align: center;">Thank you for your order ${request.session.name}!</span><br><table border="2px">
+var invoice_str = `<span style="display: flex; font-size: large; color: black; justify-content: center; text-align: center;">Thank you for your order ${user_info["name"]}!</span><br><table border="2px">
 <thead>
     <th>
         Product
@@ -211,6 +211,7 @@ var invoice_str = `<span style="display: flex; font-size: large; color: black; j
 </thead>`;
 var shopping_cart = request.session.cart;
 let subtotal = 0;
+console.log(user_info["name"])
 // need to get total from qs
 // having trouble with getting shopping cart total from the cart itself
 let params = new URLSearchParams(request.query);

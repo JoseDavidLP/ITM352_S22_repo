@@ -1,7 +1,8 @@
 <!-- 
 Jose Pangelinan
-Assignment 2
+Assignment 3
 invoice page, this is to format and design the style of the invoice
+this page will be seen by the user when they checkout. this will allow the user to return home to shop again or just leave the page when they are done. 
 -->
 
 <!--invoice template from invoice3 WOD-->
@@ -20,8 +21,16 @@ invoice page, this is to format and design the style of the invoice
         cart_info = JSON.parse(response);
         for (product_key in cart_info) {
             total += cart_info[product_key].reduce((a, b) => a + b);
+        } 
+        if (total = 0) {
+            
+            location.href="./login.html";
+        
         }
     });
+    //get user info to be used in navebar and personalized ui
+    //if user is not signed in then redirect them to login page
+    //security issue if they can get to this page without loggin in
     if(getCookie("user_info") != "" ){
             var user_info= JSON.parse(getCookie("user_info"))
         }else{
@@ -60,9 +69,9 @@ invoice page, this is to format and design the style of the invoice
 </div>
 <center>
     <script>
-
+// sends a personalized message with the user email
     document.write(`<p>Thank you for shopping with us! your invoice has bent sent to ${user_info.email}!</p>`);
-
+//simple design for invoice from assignment 2
 </script>
         <table border="2" class="center">
             <tbody>
@@ -112,7 +121,10 @@ invoice page, this is to format and design the style of the invoice
                     var shipping;
                     if (subtotal > 500) {
                         shipping = 0;
-                    } else if (subtotal >= 0 && subtotal < 150) {
+                    } else if (subtotal = 0) {
+                        shipping = 0;
+                    }
+                    else if (subtotal > 0 && subtotal < 150) {
                         shipping = 10;
                     } else {
                         shipping = 15;
