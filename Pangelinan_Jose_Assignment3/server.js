@@ -211,7 +211,6 @@ var invoice_str = `<span style="display: flex; font-size: large; color: black; j
 </thead>`;
 var shopping_cart = request.session.cart;
 let subtotal = 0;
-console.log(user_info["name"])
 // need to get total from qs
 // having trouble with getting shopping cart total from the cart itself
 let params = new URLSearchParams(request.query);
@@ -437,7 +436,7 @@ app.post("/register", function (request, response) {
       qty_data_obj['email'] = reg_email;
       qty_data_obj['fullname'] = users[reg_email]['fullname'];
       let params = new URLSearchParams(qty_data_obj);
-      response.redirect(request.session.lastpage); //all good! => to last page
+      response.redirect("./login.html"); //all good! => to last page
    } else {// if there is an error send them back to registration page with errors
       request.body['registration_errors'] = JSON.stringify(registration_errors);
       let params = new URLSearchParams(request.body);
