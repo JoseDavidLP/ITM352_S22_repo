@@ -87,9 +87,9 @@ function isNonNegInt(q, return_errors = false) {
                 if (products_key == this_product_key) continue;
                 document.write(`<a style='color: darkgreen;' href='./display_products.html?products_key=${products_key}'>${products_key}<a>&nbsp&nbsp&nbsp;`);
             }
-           //shows the ammount of products in the cart on navbar
+           
         </script>
-        
+         
         <a href="./cart.html" style='color: darkgreen;'>View Cart (<span id="cart_total">0</span>)</a>
         <script>
             cart_total.innerHTML = total;
@@ -132,7 +132,7 @@ function isNonNegInt(q, return_errors = false) {
     <script>
         document.write(`<center><h2>${this_product_key}</h2></center>`);
     </script>
-    <!-- Displays products and adds them to cart when button is pressed-->
+    <!-- Displays products and POST to ./process_form -->
     <div class="products">
         <script>
             document.write(`<FORM action="/add_to_cart?products_key=${this_product_key}" method="POST">`);

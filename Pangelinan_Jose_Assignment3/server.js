@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 var session = require('express-session');
 app.use(session({secret: "MySecretKey", resave: true, saveUninitialized: true}));
-//nodemailer https://www.w3schools.com/nodejs/nodejs_email.asp
+//nodemailer 
 var nodemailer = require('nodemailer');
 //user data file
 var filename = 'user_data.json';
@@ -169,6 +169,7 @@ app.post("/cart_update", function (request, response, next) {
 
 /* ------------------ CHECKOUT  --------------------------------------------- CHECKOUT --------------------------------- CHECKOUT ----------------------- CHECKOUT ----------------------------- */
 //cart checkout, mostely from example codes and meeting with prof port
+
 app.post("/cart_checkout", function (request, response) {
    var user_info= JSON.parse(request.cookies["user_info"]);
   // Generate HTML invoice string / this is just to keep the webpage consistant in all pages
@@ -313,6 +314,7 @@ for (product_key in products_data) {
   
 
 /* ------------------LOGIN FORM---------------------LOGIN FORM-----------------------------LOGIN FORM-----------------------------LOGIN FORM---------------------------------LOGIN FORM--------------------------------- */
+// taken from my assignment 2 where the code was inspired by https://github.com/youngtsx
 app.post("/process_login", function (request, response) { 
    var errors = {};
    //login form info from post
@@ -351,6 +353,7 @@ app.post("/process_login", function (request, response) {
 });
 
 /* ------------------LOGOUT FORM--------------------------LOGOUT FORM-----------------------------------LOGOUT FORM-----------------------------------LOGOUT FORM------------------------------------------- */
+// taken from my assignment 2 where the code was inspired by https://github.com/youngtsx
 app.get("/logout", function (request, response) { 
    var user_info = request.cookies["user_info"]; //turns data from the cookie into a variable 
    console.log(JSON.stringify(user_info));
@@ -375,13 +378,15 @@ app.get("/logout", function (request, response) {
 /*----------------REGISTRATION PAGE---------------------------REGISTRATION PAGE----------------------------REGISTRATION PAGE------------------------------------------REGISTRATION PAGE------------------------*/
 //process all registration requests
 //if there are 0 errors then redirect to
+// all data goes through validation before getting passed through
+// taken from my assignment 2 where the code was inspired by https://github.com/youngtsx
 app.post("/register", function (request, response) {
    //starts with 0 errors
    var registration_errors = {};
    //gets email input and turns to variable
    var reg_email = request.body['email'].toLowerCase();
 
-   //check email fomaatting 'xxx@yyy.com'
+   //check email fomatting
    if (/^[a-zA-Z0-9._]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,3}$/.test(request.body.email) == false) {
       registration_errors['email'] = `Please enter a valid email`;
       //if there is no input for email send error
@@ -431,7 +436,7 @@ app.post("/register", function (request, response) {
       qty_data_obj['email'] = reg_email;
       qty_data_obj['fullname'] = users[reg_email]['fullname'];
       let params = new URLSearchParams(qty_data_obj);
-      response.redirect(request.session.lastpage); //all good! send to last page
+      response.redirect(request.session.lastpage); //all good! => to last page
    } else {// if there is an error send them back to registration page with errors
       request.body['registration_errors'] = JSON.stringify(registration_errors);
       let params = new URLSearchParams(request.body);
@@ -442,6 +447,9 @@ app.post("/register", function (request, response) {
 /* -------------Changing user's data --------------------------Changing user's data-----------------Changing user's data------------------------------------Changing user's data----------------------------------------------*/
 //FIXED ASSIGNMENT 2 ERROR (SEE BELOW)
 // fixed any issues and updated to meet my website requirements
+// users can change passwords for security
+// all data goes through validation before getting passed through
+// taken from my assignment 2 where the code was inspired by https://github.com/youngtsx
 app.post("/newpw", function (request, response) { 
    var reseterrors = {};
 
