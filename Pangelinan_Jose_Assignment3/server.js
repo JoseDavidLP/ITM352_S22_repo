@@ -230,7 +230,7 @@ for (product_key in products_data) {
             subtotal = subtotal + extended_price;
             invoice_str += `<tr>
             <td>
-                ${products_data[product_key][i]['name']}
+                ${products_data[product_key][i]['item']}
             </td>
             <td>
             ${qty}
