@@ -86,6 +86,8 @@ app.post("/get_products_data", function (request, response) {
 });
 
 /* ------------------ADD TO CART ------------------------------ADD TO CART-----------------------------------------ADD TO CART-------------------------------ADD TO CART----------------------------- */
+//inspired by assignment 3 workshop
+// added data validation to ensure nothig other than integers get put into the string
 app.post("/add_to_cart", function(request, response) {
     console.log(request.body);
     let params = new URLSearchParams(request.body);
@@ -169,7 +171,7 @@ app.post("/cart_update", function (request, response, next) {
 
 /* ------------------ CHECKOUT  --------------------------------------------- CHECKOUT --------------------------------- CHECKOUT ----------------------- CHECKOUT ----------------------------- */
 //cart checkout, mostely from example codes and meeting with prof port
-
+//upon checout the user will recieve an invoice via email and this is where is is created. it will create the invoice and send them to invoice.html
 app.post("/cart_checkout", function (request, response) {
    var user_info= JSON.parse(request.cookies["user_info"]);
   // Generate HTML invoice string / this is just to keep the webpage consistant in all pages
@@ -209,6 +211,7 @@ var invoice_str = `<span style="display: flex; font-size: large; color: black; j
         Extended Price
     </th>
 </thead>`;
+//gets shopping cart
 var shopping_cart = request.session.cart;
 let subtotal = 0;
 // need to get total from qs
@@ -220,7 +223,8 @@ if (params.has('total')) {
 }
 console.log(total);
 let total_quantity = total;
-
+// this is will get the name of the products that was just purchases and puts it into the invoice/receipt for the email
+// creates the invoice form products selected in their cart upon checkout
 for (product_key in products_data) {
     for (i = 0; i < products_data[product_key].length; i++) {
         if (typeof shopping_cart[product_key] == 'undefined') continue;
@@ -281,7 +285,7 @@ for (product_key in products_data) {
         rejectUnauthorized: false
       }
     });
-  
+  // sender email info
     var user_email = user_info["email"];
     var mailOptions = {
       from: 'jdlp@hawaii.edu',
@@ -289,13 +293,13 @@ for (product_key in products_data) {
       subject: 'Water Of Life invoice',
       html: invoice_str
     };
-    console.log(user_email);
+    console.log(user_email);//check if works
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         invoice_str += '<br>There was an error and your invoice could not be emailed';
       } else {
         invoice_str += `<br>Your invoice was mailed to ${user_email}`;
-      }
+      }//redirects to invoice where they will see a table with their orders and they get notified that their invoice has been sent to their email
       response.redirect(`./invoice.html`);
     });
 }
@@ -315,6 +319,8 @@ for (product_key in products_data) {
 
 /* ------------------LOGIN FORM---------------------LOGIN FORM-----------------------------LOGIN FORM-----------------------------LOGIN FORM---------------------------------LOGIN FORM--------------------------------- */
 // taken from my assignment 2 where the code was inspired by https://github.com/youngtsx
+//got the app,post from tiffany young for my assignment 2 and modified it to fit with my server
+//this allow users to login and it verifies their info by loking through user_data.json and logging them in
 app.post("/process_login", function (request, response) { 
    var errors = {};
    //login form info from post
@@ -380,6 +386,7 @@ app.get("/logout", function (request, response) {
 //if there are 0 errors then redirect to
 // all data goes through validation before getting passed through
 // taken from my assignment 2 where the code was inspired by https://github.com/youngtsx
+// took the app.post from tiffany young and modified it to work with my server from assignment2
 app.post("/register", function (request, response) {
    //starts with 0 errors
    var registration_errors = {};
@@ -450,6 +457,7 @@ app.post("/register", function (request, response) {
 // users can change passwords for security
 // all data goes through validation before getting passed through
 // taken from my assignment 2 where the code was inspired by https://github.com/youngtsx
+// from assignment 2: took the function from tiffany young and fixed all the issues as well as added some features
 app.post("/newpw", function (request, response) { 
    var reseterrors = {};
 
